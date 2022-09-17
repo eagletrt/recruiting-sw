@@ -1,2 +1,110 @@
 # project 2
 
+This project require you build the most basic part of a telemetry software: logging every information received.
+
+The functions in **fake_receiver.h** will simulate an interface to CAN bus (protocol used in automotive to share data between ECUs). The data received must be parsed and then eventually logged.  
+
+You will implement a basic Finite State Machine with Idle and Run states, both in Idle and Run you will receive data from "CAN" and parse them. Two specific messages will trigger a state transition. Only in Run state the telemetry will log the data.
+
+***Message example***
+
+~~~CAN
+0A0#6601
+~~~
+
+## Finite State Machine
+
+Use a state machine architecture to separate the functionalities in Idle and Run state.
+
+### Idle
+
+Receive messages and parse them, when you receive the start message transition to Run state. This defines that a new session is started.
+
+### Run
+
+Receive and parse messages, save the raw messages in a file (each new session must have a different file). If you receive the stop message, then close the file and transition back to Idle.
+
+### Extra states
+
+If you want you can add some extra states. Is not required.
+
+## Logged file
+
+The output file will have a line for each message received prepended with the timestamp at wich the message was received.
+
+~~~CAN
+// received message
+0A0#6601
+
+// logged message
+(unix_timestamp) 0A0#6601
+~~~
+
+Each session must have a unique filename.
+
+## Start and Stop messages
+
+~~~CAN
+// Start
+0A0#6601
+0A0#FF01
+
+// Stop
+0A0#66FF
+~~~
+
+The start messages will be two, if one of them is received then transition to Run. If you are already in run, then do nothing.
+
+## Parsing
+
+You need to parse the received messages. **Don't** simply match string by string.
+
+Message description:
+
+~~~CAN
+0A0#6601
+~~~
+
+The message is composed by ID and payload.
+The string received is formatted as ***\<ID>#\<PAYLOAD>***.
+
+### ID
+
+In the example is ***0A0***, it is expressed in hexadecimal, so it represent 160 in decimal base.  
+
+### Payload
+
+It is composed by at most 8 bytes, each composed by 2 chars in hexadecimal. So in the example there are only 2 bytes:
+
+~~~CAN
+// first example
+6601
+
+66 -> first byte  -> 102 in decimal
+01 -> second byte -> 1 in decimal
+
+// second example
+90291
+this is a nonvalid payload as the number of chars is not even.
+~~~
+
+## Building
+
+The project contains a CMakeLists.txt with a basic setup to build the project.
+
+The first time building the project:
+
+~~~bash
+mkdir -p build
+cd build
+cmake ..
+make -j$(nproc)
+~~~
+
+All the other times stay in build directory and:
+
+~~~bash
+make -j$(nproc)
+~~~
+
+> **NOTE**: The executable is in **bin** folder, called project_2.
