@@ -8,7 +8,14 @@ Build the most basic and crucial part of a telemetry software: logging every inf
 
 The functions in **fake_receiver.h** will simulate an interface to CAN bus (protocol used in automotive to share data between ECUs). The data received must be parsed and then eventually logged.
 
-You will implement a basic Finite State Machine with Idle and Run states, both in Idle and Run you will receive data from "CAN" and parse them. Two specific messages will trigger a state transition. Only in Run state the telemetry will log the data.
+You will implement a basic [Finite State Machine](#finite-state-machine) with Idle and Run states, both in Idle and Run you will receive data from "CAN" and [Parse](#parsing) them. Two specific messages will trigger a state transition. Only in Run state the telemetry will log the data. Then with the parsed messages compute some basic [statistics](#statistics).
+
+So the requirements are:
+
+- [Finite State Machine](#finite-state-machine)
+- [Logging](#logged-file)
+- [Parse](#parsing)
+- [statistics](#statistics)
 
 **_Message example_**
 
@@ -74,7 +81,7 @@ The string received is formatted as **_\<ID>#\<PAYLOAD>_**.
 
 #### ID
 
-In the example is **_0A0_**, it is expressed in hexadecimal, so it represent 160 in decimal base.
+In the example is **_0A0_**, it is expressed in hexadecimal, so it represent 160 in decimal base. This field is at most 12 bits, use a uin16_t to represent it.
 
 #### Payload
 
@@ -91,6 +98,17 @@ It is composed by at most 8 bytes, each composed by 2 chars in hexadecimal. So i
 90291
 this is a nonvalid payload as the number of chars is not even.
 ```
+
+### Statistics
+
+For each message ID, compute the statistics of the elapsed time beween messages of the same ID.
+
+Compute the mean time (in milliseconds) between each message. Note that message frequencies are different for each ID. Each time the FSM transitions to Stop, your script must save a [CSV](https://it.wikipedia.org/wiki/Comma-separated_values) containing the computed values (in number):
+
+|ID|number_of_messages|mean_time|
+|-:|-:|-:|
+|0A0|1|100|
+|181|100|0.01|
 
 ## Getting started
 
