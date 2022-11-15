@@ -14,7 +14,7 @@ int open_can(const char* filepath);
 /**
  * @brief simulates receiveing data from CAN interface, it is blocking with a random sleep.
  * 
- * @param message where the data will be setted
+ * @param message where the data will be set
  * @return int -1 if there was an error reading CAN, else it returns the number of bytes read
  */
 int can_receive(char message[MAX_CAN_MESSAGE_SIZE]);
