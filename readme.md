@@ -6,10 +6,21 @@ This test is designed to get an idea of your technical skills and workflow. Assi
 
 You have **2 weeks** to complete the project. Time assigned is not representative of the effort needed to finish the work, it is instead calculated to give you the option of working at your own pace, with plenty of time to **ask questions**.
 
+> ⚠️ If you are submitting an application in the spring 2023 openings the only SW available position are for the Driverless project
+
+## Driverless
+
+You have to complete two driverless-specific tasks as specified in the following link on top of one of the many standard [SW recruitment projects](#software) with the specified modality.  
+The deadline is still 2 weeks, plenty of time to develop everything.
+
+- [Driverless](./driverless/readme.md)
+
+## Software
+
 To see the specific assignments please follow one of the following links, based on the team you were assigned to.
 
 - [Microcontrollers](./microcontrollers/readme.md)
-- [Steering wheel](./steering_wheel/readme.md)
+- [Steering wheel](./steering_wheel/readme.md) (only for autumn 2022 applicants)
 - [Telemetry](./telemetry/readme.md)
 
 ## Usage
@@ -22,7 +33,7 @@ recruiting-sw-<project-you-chose>
 ~~~
 
 Then send us the link of the repo so that we will be able to review it
- ([Filippo Faccini](https://github.com/Pippo98) and [Tommaso Canova](https://github.com/cannox227)).
+ ([Filippo Faccini](https://github.com/Pippo98), [Tommaso Canova](https://github.com/cannox227) or [Stefano Dell'Anna](https://github.com/Stedll)).
 
 ## Feedback
 
