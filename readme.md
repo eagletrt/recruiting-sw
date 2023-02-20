@@ -12,6 +12,10 @@ To see the specific assignments please follow one of the following links, based 
 - [Steering wheel](./steering_wheel/readme.md)
 - [Telemetry](./telemetry/readme.md)
 
+For the driverless project, on top of one of the previous assigment you also have to complete some specific assignments as described in the following link.
+
+- [Driverless](./driverless/readme.md)
+
 ## Usage
 
 Download this repo. **Don't fork it**.  
