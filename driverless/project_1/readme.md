@@ -14,7 +14,7 @@ Due to some unidentified errors, the saved images are corrupted, here is the exa
 
 While the rolling shift is easy to correct, the chromatic aberration is more complicated, fortunately during the camera calibration process one of the team member took accurate measurements of the color (color data are provided in the common OpenCV format) of some object in the scene and found the corresponding pixel in the original image:
 
-Y=541 X=128: [250, 158,  3]
+Y=541 X=128: [250, 158,  3]  
 Y=267 X=564: [40, 195, 240]
 
 After recovering the original image you can then proceed with your job, the task is to provide to another component in the chain the boundaries, in pixel coordinates, of the 3 types of cone in the image.
