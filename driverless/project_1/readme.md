@@ -9,6 +9,7 @@ At the start of the processing chain, the camera acquire the frames that will be
 Due to some processing requirements, after the original acquisition, the images are normalized with a simple MINMAX algorithm to a reduced color space, limiting the pixel values between 50 and 200 for each color (keep this in mind).
 
 Due to some unidentified errors, the saved images are corrupted, here is the example that you will be working on:
+
 ![Screenshot](corrupted.png)
 
 While the rolling shift is easy to correct, the chromatic aberration is more complicated, fortunately during the camera calibration process one of the team member took accurate measurements of the color (color data are provided in the common OpenCV format) of some object in the scene and found the corresponding pixel in the original image:

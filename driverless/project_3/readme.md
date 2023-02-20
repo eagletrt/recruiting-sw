@@ -11,6 +11,7 @@ Due to some miscommunication between the people implementing different steps of 
 Due to some poorly written code, the data is processed without errors applying *automagically* a [reshape function](https://numpy.org/doc/stable/reference/generated/numpy.reshape.html) to the input to obtain a Nx3 matrix with the consequent scrambling of the point coordinates.
 
 Due to this error the resulting point cloud becomes:
+  
 ![Screenshot](corrupted.png)
 
 Your job is to take the [point cloud file](https://drive.google.com/file/d/1P12oJICJytazgFfZ5TexihfIynk2zewz/view?usp=sharing) and descramble the data, applying the reverse operation to obtain the original, corrected, point cloud and save it in a new .las file with all the information and metadata as the original one.

@@ -26,8 +26,8 @@ You are furthermore required to be able to explain your implementation choices i
 
 ## Useful material
 
-[Resource 1](https://ieeexplore.ieee.org/document/4362878)
-[resource 2](https://ieeexplore.ieee.org/document/8346440)
+[Resource 1](https://ieeexplore.ieee.org/document/4362878)  
+[resource 2](https://ieeexplore.ieee.org/document/8346440)  
 		
 ## Note
 

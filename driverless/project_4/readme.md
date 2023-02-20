@@ -9,6 +9,7 @@ This was one of the questions for the FSG quiz of 2023, the available time was 2
 ## FSG 2023 - Quiz 5
 
 Your vehicle has its right-hand base coordinate frame defined with the x-axis pointing forward into the driving direction and the z-axis upwards.
+
 ![Screenshot](coordinate_frame.png)
 
 A camera is positioned on the vehicle as follows, in the vehicle coordinate frame:
