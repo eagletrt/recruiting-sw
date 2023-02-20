@@ -10,7 +10,7 @@ You have **2 weeks** to complete the project. Time assigned is not representativ
 
 ## Driverless
 
-For the driverless project, you have to complete two driverless-specific tasks as specified in the following link on top of one of the many standard [SW recruitment projects](sSoftware) according to the specific assignment, the deadline is still 2 weeks that, as stated before, it is plenty of time to develop everything.
+For the driverless project, you have to complete two driverless-specific tasks as specified in the following link on top of one of the many standard [SW recruitment projects](#software) according to the specific assignment, the deadline is still 2 weeks that, as stated before, it is plenty of time to develop everything.
 
 - [Driverless](./driverless/readme.md)
 
