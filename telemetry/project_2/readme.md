@@ -8,7 +8,11 @@ Build the most basic and crucial part of a telemetry software: logging every inf
 
 The functions in **fake_receiver.h** will simulate an interface to CAN bus (protocol used in automotive to share data between ECUs). The data received must be parsed and then eventually logged.
 
-You will implement a basic [Finite State Machine](#finite-state-machine) with Idle and Run states, both in Idle and Run you will receive data from "CAN" and [Parse](#parsing) them. Two specific messages will trigger a state transition. Only in Run state the telemetry will log the data. Then with the parsed messages compute some basic [statistics](#statistics).
+You will implement a basic [Finite State Machine](#finite-state-machine) with Idle and Run states, both in Idle and Run you will receive data from "CAN" and [Parse](#parsing) them. Two specific messages will trigger a state transition. The telemetry will log the data only in Run state. Then, with the parsed messages, compute some basic [statistics](#statistics).  
+To receive messages, you will need to use a multithread approach, this means that you will need to start a thread.
+The thread will only receive data using the function *can_receive* (defined in *fake_receiver.h*). When implementing the second thread, take into consideration data race, and be careful to avoid two thread accessing the same memory location simultaneously.  
+The received data has to be processed in the main thread.  
+The second thread must be implemented in a separate file from main.cc .
 
 So the requirements are:
 

@@ -20,7 +20,7 @@ The deadline is still 2 weeks, plenty of time to develop everything.
 To see the specific assignments please follow one of the following links, based on the team you were assigned to.
 
 - [Microcontrollers](./microcontrollers/readme.md)
-- [Steering wheel](./steering_wheel/readme.md) (only for autumn 2022 applicants)
+- [Steering wheel](./steering_wheel/readme.md)
 - [Telemetry](./telemetry/readme.md)
 
 ## Usage
@@ -33,7 +33,7 @@ recruiting-sw-<project-you-chose>
 ~~~
 
 Then send us the link of the repo so that we will be able to review it
- ([Filippo Faccini](https://github.com/Pippo98), [Tommaso Canova](https://github.com/cannox227) or [Stefano Dell'Anna](https://github.com/Stedll)).
+ ([Filippo Faccini](https://github.com/Pippo98), [Giacomo Mazzucchi](https://github.com/tzarjakob) or [Stefano Dell'Anna](https://github.com/Stedll)).
 
 ## Feedback
 

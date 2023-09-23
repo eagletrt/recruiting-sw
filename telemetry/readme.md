@@ -5,7 +5,8 @@
 ## Abstract
 
 From the project you chose, we will test your programming skills in C/C++, your approach to a problem and your solving process.  
-Remember that the choices you make must have a foundation, and based on that an easier solution may be preferred to a more complex one.
+Remember that the choices you make must have a foundation, and based on that an easier solution may be preferred to a more complex one.  
+Choose only one of theese two project, depending on what you're more interested in. 
 
 ## Projects
 
