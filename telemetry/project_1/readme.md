@@ -8,19 +8,27 @@ Create a desktop application using [ImGui](https://github.com/ocornut/imgui). Yo
 
 - User login.
 - Global state of the application.
+- Parse and plot a CSV file.
 
-The application mus be organized with multiple tabs, each in a different source file.  
-Keep the project clean, setup it for scalability, allowing for new features implementations.  
+The application mus be organized with multiple tabs, each in a different source file.
+Keep the project clean, setup it for scalability, allowing for new features implementations.
 Try using some thirdparty libraries to add functionalities to your application.
 
 ### User login
 
-Use ImGui to allow a user to login. You could setup different login types (Admin, Maintainer, Basic user), or simply logged or not.  
+Use ImGui to allow a user to login. You could setup different login types (Admin, Maintainer, Basic user), or simply logged or not.
 Based on the login state, change the attitude of your application, maybe locking some functionalities.
 
 ### Global State
 
 Define with some programming thechnique a way to access to the same data across multiple files/classes. For example if the login happened then the whole application should know the new login state.
+
+### CSV file
+
+Implement a parser for a CSV file, use your interface to select the path or the file to load.
+Use the login type to change the way the data is plotted.
+
+CSV files are in csv_samples folder, you have 2 files, one of a acceleration test and the other of a skidpad.
 
 ## Getting started
 
