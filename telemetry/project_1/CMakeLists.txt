@@ -14,13 +14,14 @@ find_package(GLEW REQUIRED)
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/implot
 )
 
 FILE(GLOB imgui_srcs ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/*)
 add_library(
     ${PROJECT_NAME}
     SHARED
-    
+
     # Sources
     ${CMAKE_CURRENT_SOURCE_DIR}/core/app.cpp
 
@@ -29,6 +30,10 @@ add_library(
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/backends/imgui_impl_glfw.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/backends/imgui_impl_opengl2.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/imgui/misc/cpp/imgui_stdlib.cpp
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/implot/implot.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/implot/implot_items.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/implot/implot_demo.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
