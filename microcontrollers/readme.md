@@ -1,54 +1,97 @@
-# Recruitment microcontrollers
+# Microcontroller recruiting task
 
-> ⚠️ This document is fairly technical to maintain brevity, if you have **any** questions ask your recruiter or come visit us at floor -2 of Povo 2.
+## Setting up the development environment
 
-## Abstract
+- Download STM32 CubeMX from the [official link](https://www.st.com/en/development-tools/stm32cubemx.html) and install it.
+- Create a new project selecting the nucleo board you have been assigned.
+- Once created the project, go to "Project Manager", fill out the project name, location and select "Makefile" as toolchain. Then click on "GENERATE CODE".
 
-The main purpose of the project is to see how you approach a typical problem or task that you could face while developing the car, of course, using a a low level perspective.
-You are free to choose which embedded device to use between STM, ESP32, Arduino and Texas Instruments boards.
+<img src="./media/cubemx_generation.png" alt="drawing" width="900"/>
 
-### Task
+- Open the generated folder in VsCode (you should see something like this).
 
-A new sensor needs to be used in order to add a feature on the car. You are responsible to develop the firmware of an evaluation board which checks periodically the sensor value and does other stuffs such as checking the system voltage and the emergency button. Using **a state machine is required**.
-You are free to choose whatever sensor you like (thermistor, encoder, type pressure sensor and so on). Based on the sensor chosen, a different way to manipulate the data will be considered. Please evaluate the time you have to develop the project, remember that **a smarter solution will be considered more suitable than a fancier and complex one**. Remember also to stick to the range of values specified in the datasheet (e.g: a specific PTC1000 thermistor can operate between -55°C and 125°C), whether the value read is out of range print it as an error using the UART serial interface.
-The systems voltage level is acquired by an ADC input of your microcontroller. The system voltage stands into the following range, 1.8 V to 2.7 V, and it's regulated with a potentiometer. If an _undervoltage_ or an _overvoltage_ is detected the system must run into a `danger state` and turn on one of the two leds, one for each situation, until the danger situation is not detected anymore. Certainly, **both leds on will be considered as an implausible state**.
-The sensor's value must be checked every 200 ms, while the system voltage level every 350 ms, the time must be checked with a timer, **busy waiting is not allowed**.
-Lastly an emergency button is present and can be pushed if the systems needs to be paused, it **must be handled with an external interrupt** and if it is pressed the board must go into a `waiting state` and then if pressed again it has to return to the `running state`. During the `waiting state` the board isn't allowed to do anything except for printing the `"Board in waiting state - please press the emergency button"` message every 500 ms, in this case busy waiting is allowed.
-_Note that the default button of your chosen board can be used as emergency button._
+<img src="./media/fmanager.png" alt="drawing" width="200"/>
 
-![micro-task](media/micro_task.png)
+- Install the STM32 VsCode Extension.
 
-A brief recap:
+<img src="./media/stm32_vscode_extension.png" alt="drawing" width="900"/>
 
-- Use a state machine
-- Read one sensor every 200 ms <sup>(NB: implementing a second sensor will be considered as a plus but it's not mandatory)<sup>
-- Manipulate the raw data in a correct way
-- Check the system voltage every 350 ms (1.8-2.7V is ok, otherwise act as if an error occurred)
-- Use timers to check the acquisitions' timing
-- Turn on one led in case of _overvoltage_, and turn on the other one case of _undervoltage_ (in case there aren't enough leds available, GPIO pins output will be considered acceptable)
-- Use serial communication (UART) to display:
-  - acquired values (showing the acquisition time)
-  - error states
-  - leds status
-  - waiting state
+- On the left you should see the extension logo, select it and click on "install build tools", then leave it some time for installation
+- After installation you should see on the same place "Build", "Clean build", "Flash", etc...
+- Click on build and verify that it builds correctly
+- Then connect the nucleo board and verify that it flashes correctly
+
+
+## The Tools
+
+Aside from the nucleo board, you will be given a Hall Sensor, an easy to use sensor module you can use to sense moving or alternating magnetic fields, typically found in rotating motors, moving magnet, linear magnets, etc. You can build a contactless speed counter or speedometer with this module for measuring the rotation speed of motor by counting the frequency of the motor. You can also use this module to sense a door magnet which is useful if you plan to build projects involves door sensing, window sensing, etc.
+
+> This sensor can works in both analog and digital mode. You can connect the analog output (AO) pin to Arduino to read voltage directly from the A3144 chip, or digital output (DO) to sense the processed output from the module.
+
+Specific Features:
+- Comes with A3144 hall-effect sensor chip in front that is sensitive to changing magnetic fields.
+- Application such as door sensor, window sensor, contactless tachometer, speedometer, magnetic field sensing, etc.
+- Output type : Analog and Digital
+- Unipolar hall-effect digital switch
+
+Common Features:
+- Logical IC : LM393
+- Operating voltage : 5V
+- Output current : ?15 mA
+- Adjustable sensitivity via potentiometer
+- Comes with LED indicators for POWER and OUTPUT
+- Fixed bolt holes for easy installation
+
+
+### Wiring
+| Label | Meaning        | Connection                  |
+|-------|----------------|-----------------------------|
+| VCC   | Power source   | Connect to 5V of system     |
+| GND   | Ground         | Connect to GND of system    |
+| DO    | Digital Output | Connect to digital IO pin   |
+| AO    | Analog Output  | Connect to analog input pin |
+
 
 ## Prerequisites
 
-Typically when facing microcontrollers you should have these prerequisites:
-
-- Basic Finite State Machine (FSM) design
-- Basic C/C++ knowledge
-- Computer architectures
-- Basic electronics knowledge
-
-**MicroPython is not considered a prerequisite** (_just kidding_)
-
 ![micropython meme](https://i.redd.it/yj4c5dzxurm81.jpg)
 
-Don't be afraid if you feel not so confident with one or two prerequisites, with this project we try to see even your attitude to learning new things and to solve problems, the lack of some requirements will be fullfilled in the first period with the team support!
+## The task
 
-### Setup
+The task is composed by the firmware on the nucleo board and the software to plot the data (you can use existing software if you find it).
+
+### Firmware on the nucleo
+
+Your task is to read the hall sensor, both in analog (using the ADC in DMA mode) and digital value (using a GPIO input with interrupt), possibly apply some filters and send the data to serial. Then implement a small CLI with three commands:
+- `raw`: remove all filters
+- `moving average`: apply a moving average filter with 150 elements
+- `random noise`: add artificial random noise <em>ad libitum</em>
+You'll also need to read the USER BUTTON and control the USER LED on the nucleo board. The logic should follow this FSM.
+
+![FSM](./media/fsm.png)
+
+- <b>Init</b>. Initialize everything.
+- <b>Wait Request</b>. The CLI is on, the led is off, sensor reading is off. If the button is pressed go to the Listening state.
+- <b>Listening</b>. The CLI is off and the led is on. Read the sensor, send via serial the data. If the digital value of the hall sensors is high for 5 seconds continuously, then go to the warning state. If the button is pressed, go to the pause state.
+- <b>Pause</b>. The CLI is on, the led is blinking with duty cycle 1000 ms, sensor reading is off. If the button is pressed go to the Listening state.
+- <b>Warning</b>. The CLI is off, the led is off, sensor reading is off. You must spam in serial "WARNING". If the button is pressed go to the Listening state.
+- <b>Error</b>. Any error you encounter will redirect you here. CLI is off, sensor reading is off, the led is blinking with duty cycle 50 ms. You must spam in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the USER BUTTON (you must reset the board via software).
+
+If you like, you can use [this library](https://github.com/pbosetti/gv_fsm/) for generating FSM code. Otherwise feel free to implement your own.
+
+### Software on the host PC
+
+On the host PC, plot real time both the analog and digital value from the serial in 2 different plots. You can use anything you want.
+
+#### Bonus Task
+
+From the hall sensors data you receive via serial, modulate the signal <em>ad libitum</em> to play sound. If you use C/C++, [Miniaudio](https://miniaud.io/index.html) is a recommended audio library.
+
+## You can start!
 
 - Create a new GitHub repository and upload the project files via git
 - Start working on the task, creating git commits as you make progress
 - When it's time to deliver, please send your recruiter a link to your github repository
+- Say often "AOOOOOO" to encourage yourself
+
+
