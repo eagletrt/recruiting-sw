@@ -66,6 +66,7 @@ Your task is to read the hall sensor, both in analog (using the ADC in DMA mode)
 - `raw`: remove all filters
 - `moving average`: apply a moving average filter with 150 elements
 - `random noise`: add artificial random noise <em>ad libitum</em>
+
 You'll also need to read the USER BUTTON and control the USER LED on the nucleo board. The logic should follow this FSM.
 
 ![FSM](./media/fsm.png)
@@ -81,11 +82,7 @@ If you like, you can use [this library](https://github.com/pbosetti/gv_fsm/) for
 
 ### Software on the host PC
 
-On the host PC, plot real time both the analog and digital value from the serial in 2 different plots. You can use anything you want.
-
-#### Bonus Task
-
-From the hall sensors data you receive via serial, modulate the signal <em>ad libitum</em> to play sound. If you use C/C++, [Miniaudio](https://miniaud.io/index.html) is a recommended audio library.
+On the host PC, plot real time both the analog and digital value from the serial in 2 different plots. You can use anything you want. From the hall sensors data you receive via serial, modulate the signal <em>ad libitum</em> to play sound. If you use C/C++, [Miniaudio](https://miniaud.io/index.html) is a recommended audio library.
 
 ## You can start!
 
