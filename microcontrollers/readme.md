@@ -74,9 +74,9 @@ You'll also need to read the USER BUTTON and control the USER LED on the nucleo 
 - <b>Init</b>. Initialize everything.
 - <b>Wait Request</b>. The CLI is on, the led is off, sensor reading is off. If the button is pressed go to the Listening state.
 - <b>Listening</b>. The CLI is off and the led is on. Read the sensor, send via serial the data. If the digital value of the hall sensors is high for 5 seconds continuously, then go to the warning state. If the button is pressed, go to the pause state.
-- <b>Pause</b>. The CLI is on, the led is blinking with duty cycle 1000 ms, sensor reading is off. If the button is pressed go to the Listening state.
+- <b>Pause</b>. The CLI is on, the led is blinking with duty cycle 1000 ms (use a TIMER peripheral), sensor reading is off. If the button is pressed go to the Listening state.
 - <b>Warning</b>. The CLI is off, the led is off, sensor reading is off. You must spam in serial "WARNING". If the button is pressed go to the Listening state.
-- <b>Error</b>. Any error you encounter will redirect you here. CLI is off, sensor reading is off, the led is blinking with duty cycle 50 ms. You must spam in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the USER BUTTON (you must reset the board via software).
+- <b>Error</b>. Any error you encounter will redirect you here (especially if HAL functions return anything different than HAL_OK). CLI is off, sensor reading is off, the led is blinking with duty cycle 50 ms (use a TIMER peripheral). You must spam in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the USER BUTTON (you must reset the board via software).
 
 If you like, you can use [this library](https://github.com/pbosetti/gv_fsm/) for generating FSM code. Otherwise feel free to implement your own.
 
@@ -86,9 +86,9 @@ On the host PC, plot real time both the analog and digital value from the serial
 
 ## You can start!
 
-- Create a new GitHub repository and upload the project files via git
-- Start working on the task, creating git commits as you make progress
+- Create a new GitHub repository and upload the project files via git, start working on the task, creating git commits as you make progress
 - When it's time to deliver, please send your recruiter a link to your github repository
-- Say often "AOOOOOO" to encourage yourself
+- **IT IS MANDATORY A CODE THAT FOLLOWS GOOD PRACTISES**
+- **THE SPECIFICATIONS MUST BE FOLLOWED PRECISELY, NO BUGS ARE ALLOWED**
 
 
