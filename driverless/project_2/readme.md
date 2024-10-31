@@ -1,34 +1,177 @@
-# Project 2
+# Eagle Driverless Control Task
 
-> ⚠️ This document is fairly technical to maintain brevity, if you have **any** questions ask your recruiter or come visit us at floor -2 of Povo 2.
+## **Objective**
+The goal of this challenge is to implement a **feedback controller** for a **Formula Student Driverless vehicle**. The candidate will work with **C++ and CMake** to develop a controller that allows the vehicle to follow a trajectory while maintaining stability and minimizing tracking errors.
 
-## Abstract
+The task is divided into **five levels** of increasing complexity, with bonus challenges available for advanced candidates.
 
-You are tasked with estimate the rough pixel-coordinates motion between subsequent frames of a [video](https://drive.google.com/file/d/1JKEB5-I1O6TLbAkb223dl69tdJloUgxu/view?usp=sharing).
+## **Overview**
+Each level introduces new challenges in vehicle control, ranging from basic kinematic modeling to advanced feedback control techniques. Candidates will earn **points** for each completed level.
 
-For this task you are required to extract feature points in subsequent frames, and to match corresponding keypoints between them, the requirement that you have is precision and the real time-ness of the process (loose requirement depending on the capabilities of your machine, 10 fps can be considered good, 0.5 fps cannot).
+| **Level** | **Task** |
+|-----------|---------|
+| **1** | Implement a kinematic bicycle model | 
+| **2** | Make the vehicle follow a straight path | 
+| **3** | Implement a Proportional Controller (P) for steering | 
+| **4** | Upgrade to a PID controller for better tracking | 
+| **5** | Implement Stanley or Pure Pursuit Control | 
+| **Bonus** | Extend to a dynamic bicycle model with slip | 
+| **Bonus** | Implement Model Predictive Control (MPC) | 
 
-Keep in mind that we are interested in the motion of the platform, not of the static objects in the scene.
+---
 
-In order to continue with the processing chain you are required to produce, at compute time, a CSV file containing some statistics about the matching process, in particular, the computed homography between subsequent frames based on the filtered and matched keypoints, average and std of both distance (in pixel) and angle (in radiants) of matched keypoints (vector connecting the keypoint with the corresponding matchin pixel coordinates), you are also required to briefly describe each step of your processing and the reasoning behind it.
+## **📜 Task Breakdown**
 
-The process can be briefly summarized as
-- Extract keypoints
-- Match keypoints
-- Filter keypoints
-- Produce statistics
-    
-## To provide
+### **Level 1: Implement a Kinematic Bicycle Model**
+#### **Goal:**
+- Implement a **kinematic bicycle model** to simulate vehicle motion.
 
-The code you implemented 
-The CSV file described before
-You are furthermore required to be able to explain your implementation choices if asked to. 
+#### **Requirements:**
+- Implement the following equations of motion:
+  \[
+  x_{t+1} = x_t + v \cos(\theta) dt
+  \]
+  \[
+  y_{t+1} = y_t + v \sin(\theta) dt
+  \]
+  \[
+  \theta_{t+1} = \theta_t + \frac{v}{L} \tan(\delta) dt
+  \]
+  - Where:
+    - \( v \) is velocity.
+    - \( \delta \) is steering angle.
+    - \( L \) is wheelbase.
+    - \( \theta \) is heading.
 
-## Useful material
+- Simulate and plot the vehicle’s movement.
+- Implement a visaluzation of the vehicle trajectory in **2D** usinf **raylib or imgui**.
 
-[Resource 1](https://ieeexplore.ieee.org/document/4362878)  
-[Resource 2](https://ieeexplore.ieee.org/document/8346440)  
-		
-## Note
+#### **Bonus:**
+- Add **acceleration and deceleration** to the model.
 
-While surely it's not discouraged, you are not required to implement each step from scratch, we're not here to re-invent the wheel, choose a commonly available library to perform the various steps and, most importantly, be able to justify your choices if asked to.
+---
+
+### **Level 2: Make the Vehicle Follow a Straight Path**
+#### **Goal:**
+- Implement a **simple heading correction** to keep the vehicle on a straight trajectory.
+
+#### **Requirements:**
+- Introduce **small disturbances** (e.g., noise in heading axis).
+- Implement a **proportional control law**:
+  \[
+  \delta = K_p \cdot e
+  \]
+  - Where \( e \) is the heading error.
+- Visualize how well the controller keeps the vehicle aligned.
+
+#### **Bonus:**
+- Introduce lateral drift and correct for it.
+
+---
+
+### **Level 3: Implement a Proportional Controller (P) for Steering**
+#### **Goal:**
+- Implement a **Proportional Controller** for trajectory tracking.
+
+#### **Requirements:**
+- Generate a **smooth path** for the vehicle to follow (e.g., a straight line, a sine wave and a more complex path).
+- Given a **set of waypoints** from the generated path, use a **P controller** to adjust the steering angle:
+  \[
+  \delta = K_p \cdot e
+  \]
+  - Where \( e \) is the **cross-track error** (distance from the desired path).
+- Visualize the vehicle’s trajectory and the **tracking error**.
+- Tune the **\( K_p \)** value for optimal performance.
+
+#### **Bonus:**
+- Implement a **path planner** to generate more complex paths (e.g., a circle or a figure-eight).
+
+---
+
+### **Level 4: Upgrade to a PID Controller for Better Tracking**
+#### **Goal:**
+- Improve path tracking accuracy using a **PID controller**.
+
+#### **Requirements:**
+- Extend the **P-controller** to a **PID controller**:
+  \[
+  \delta = K_p e + K_d \frac{de}{dt} + K_i \int e dt
+  \]
+- Implement:
+  - **Derivative (D) term** to reduce oscillations.
+  - **Integral (I) term** to correct steady-state errors.
+- Tune the **PID gains** to **minimize tracking error**.
+
+#### **Bonus:**
+- Test the PID controller on a **sharper track layout** (e.g., a chicane).
+
+---
+
+### **Level 5: Implement an Advanced Controller (25 Points)**
+#### **Goal:**
+- Implement **Stanley Control or Pure Pursuit Control**.
+
+#### **Option 1: Stanley Controller**  
+- Control law:
+  \[
+  \delta = \theta_e + \tan^{-1} \left( \frac{K e}{v} \right)
+  \]
+  - Where:
+    - \( e \) is the cross-track error.
+    - \( \theta_e \) is the heading error.
+
+#### **Option 2: Pure Pursuit Controller**
+- Control law:
+  \[
+  \delta = \tan^{-1} \left(\frac{2 L y}{L_d^2} \right)
+  \]
+  - Where:
+    - \( y \) is the lookahead point.
+    - \( L_d \) is the lookahead distance.
+
+#### **Bonus:**
+- Test different controller parameters and plot the **tracking performance** over time.
+
+---
+
+## **🎯 Bonus Challenges**
+🏆 **Extend to a Dynamic Bicycle Model**  
+- Implement a **dynamic bicycle model** with:
+  - Tire slip angles.
+  - Lateral forces.
+  - Understeer/oversteer behavior.
+
+🏆 **Implement Model Predictive Control (MPC)**  
+- Formulate the control problem as an **optimization problem**.
+- Use an **MPC solver (e.g., CasADi)** to predict the vehicle’s future states.
+
+---
+
+## **📅 Submission Guidelines**
+📆 **Time Limit: 2 Weeks**
+
+### **✅ What to Submit?**
+1. **Code repository (GitHub or zip)**
+2. **CMakeLists.txt for easy compilation**
+3. **Short report (PDF or Markdown) covering:**
+   - Approach used
+   - Controller tuning strategy
+   - Challenges faced
+4. **Simulation results** (plots or animations of the vehicle path).
+
+---
+
+## **🏆 Evaluation Criteria**
+✅ **Completion:** Are all levels completed?  
+✅ **Code Quality:** Is the code **structured, readable, and documented**?  
+✅ **Controller Performance:** Does the vehicle follow the path accurately?  
+✅ **Efficiency:** Is the controller computationally efficient?  
+✅ **Creativity:** Did the candidate experiment with **different approaches or optimizations**?  
+
+---
+
+## **💡 Final Notes**
+This task simulates **real-world autonomous vehicle control problems**. Candidates should **experiment with different techniques, optimize controller performance, and deliver a structured, well-documented solution**.
+
+Good luck, future Driverless Engineers! 🚗💨
+

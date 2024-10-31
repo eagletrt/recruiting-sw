@@ -1,33 +1,138 @@
-# Project 1
+# E-Agle Formula Student Driverless Perception Task
 
-> ⚠️ This document is fairly technical to maintain brevity, if you have **any** questions ask your recruiter or come visit us at floor -2 of Povo 2.
+## **Objective**  
+The goal of this task is to implement a **perception module** for a **Formula Student Driverless vehicle**. The candidate will work with **C++, OpenCV, and CMake** (or alternatively **PCL for LiDAR data**) to process and extract meaningful information from sensor inputs, simulating a **perception pipeline for an autonomous racing car**.  
 
-## Abstract
+## **Overview**  
+Candidates will progressively complete tasks of increasing complexity, earning **points** for each successfully implemented feature.  
+The challenge consists of **five levels** plus bonus tasks.  
 
-At the start of the processing chain, the camera acquire the frames that will be used to infer information about the environment, one of the first steps is to save each frame in order to use it at a later stage to replay the acquisition.
-    
-Due to some processing requirements, after the original acquisition, the images are normalized with a simple MINMAX algorithm to a reduced color space, limiting the pixel values between 50 and 200 for each color (keep this in mind).
+| **Level** | **Task** | 
+|-----------|---------|
+| **1** | Load and display an image or LiDAR dataset | 
+| **2** | Apply edge detection to extract track boundaries | 
+| **3** | Detect the racing line and track edges | 
+| **4** | Identify and classify cones on the track | 
+| **5** | Generate an optimal trajectory using perception data | 
+| **Bonus** | Process 3D point clouds to detect cones (PCL) | 
+| **Bonus** | Visualize the perception pipeline in an interactive GUI | 
 
-Due to some unidentified errors, the saved images are corrupted, here is the example that you will be working on:
+---
 
-![Screenshot](corrupted.png)
+## **📜 Task Breakdown**
 
-While the rolling shift is easy to correct, the chromatic aberration is more complicated, fortunately during the camera calibration process one of the team member took accurate measurements of the color (color data are provided in the common OpenCV format) of some object in the scene and found the corresponding pixel in the original image:
+### **Level 1: Load and Display an Image or LiDAR Data (10 Points)**
+#### **Goal:**  
+- Load a **track image** (for the OpenCV version) or a **LiDAR point cloud** (for the PCL version).  
+- Display the loaded data for visualization.  
 
-Y=541 X=128: [250, 158,  3]  
-Y=267 X=564: [40, 195, 240]
+#### **Requirements:**  
+- C++ program that reads an input **image (PNG/JPG)** or **LiDAR dataset (PCD/CSV)**.  
+- Use **OpenCV (`cv::imshow`)** to display images, or **PCL (`pcl::visualization::PCLVisualizer`)** for point clouds.  
 
-After recovering the original image you can then proceed with your job, the task is to provide to another component in the chain the boundaries, in pixel coordinates, of the 3 types of cone in the image.
-Tto perform this task you have white paper on the type of algorithm to implement.
+#### **Bonus:**  
+- Print **metadata** such as image dimensions, channels, or LiDAR point count.  
 
-## To provide
-- The code you implemented
-- The recovered image
-- The 3 bounding boxes (4-tuple with min and max coordinates in x and y direction) in a .txt with 3 lines formatted as "$(cone_color): $(4-tuple)"
-- You are furthermore required to be able to explain your implementation choices if asked to.
+---
 
-## Suggestions
-Consider more efficient color spaces for extracting the cones from the images
+### **Level 2: Detect Track Boundaries (15 Points)**
+#### **Goal:**  
+- Apply **edge detection** to extract the track's boundaries.  
 
-## Notes
-PS: while surely it's not discouraged, you are not required to implement each step from scratch, we're not here to re-invent the wheel, choose a commonly available library to perform the various steps and, most importantly, be able to justify your choices if asked to.
+#### **Requirements:**  
+- Convert image to **grayscale** and apply **Canny or Sobel edge detection**.  
+- Display detected edges overlaid on the original image.  
+- For LiDAR: Filter and visualize only the **ground points** (e.g., use a height threshold).  
+
+#### **Bonus:**  
+- Use **adaptive thresholding** to improve edge detection robustness.  
+
+---
+
+### **Level 3: Extract Racing Line and Track Edges (20 Points)**
+#### **Goal:**  
+- Identify the **racing line** and **track edges** using contours or line detection.  
+
+#### **Requirements:**  
+- Apply **Hough Line Transform** (`cv::HoughLinesP`) or **contour detection** (`cv::findContours`).  
+- Highlight detected track edges and approximate the **racing line**.  
+- For LiDAR: Cluster ground points and fit **a track boundary model**.  
+
+#### **Bonus:**  
+- Export track edges as a **CSV file** for further processing.  
+
+---
+
+### **Level 4: Cone Detection (20 Points)**
+#### **Goal:**  
+- Detect and classify **blue and yellow cones** from the track image.  
+
+#### **Requirements:**  
+- Convert the image to **HSV color space**.  
+- Use **`cv::inRange`** to segment blue and yellow objects.  
+- Draw bounding boxes around detected cones.  
+- For LiDAR: Apply **DBSCAN clustering** to separate objects in the point cloud.  
+
+#### **Bonus:**  
+- Output cone **positions (x, y coordinates)** to a file.  
+
+---
+
+### **Level 5: Generate an Optimal Trajectory (25 Points)**
+#### **Goal:**  
+- Compute an **optimal path** based on detected cones and track boundaries.  
+
+#### **Requirements:**  
+- Use detected **cones or edges** to compute the vehicle’s **midline trajectory**.  
+- Fit a **smooth curve** (e.g., polynomial or spline).  
+- Output the computed **trajectory coordinates**.  
+
+#### **Bonus:**  
+- Implement **dynamic path smoothing** using interpolation.  
+
+---
+
+## **🎯 Bonus Challenges**
+🏆 **Process 3D LiDAR Data (10 Points)**  
+- Instead of images, use **PCL (Point Cloud Library)** to:  
+  - Load a `.pcd` file or `.csv` containing LiDAR points.  
+  - Filter out **ground points**.  
+  - Cluster and **detect cones using DBSCAN or k-means**.  
+
+🏆 **Build an Interactive GUI for Debugging (10 Points)**  
+- Create an **OpenCV interface** where:  
+  - The user can adjust thresholds dynamically.  
+  - Processed outputs update in real-time.  
+
+---
+
+## **📅 Submission Guidelines**
+📆 **Time Limit: 2 Weeks**  
+
+### **✅ What to Submit?**  
+1. **Code repository (GitHub or zip)**  
+2. **CMakeLists.txt for easy compilation**  
+3. **Short report (PDF or Markdown) covering:**  
+   - Approach used  
+   - Challenges faced  
+   - Possible improvements  
+4. **Screenshots or GIFs** showcasing results  
+
+---
+
+## **🏆 Evaluation Criteria**
+✅ **Completion:** Have all levels been completed?  
+✅ **Code Quality:** Is the code **well-structured, modular, and documented**?  
+✅ **Accuracy:** How well does the system detect cones and track edges?  
+✅ **Efficiency:** Is the pipeline optimized for real-time performance?  
+✅ **Creativity:** Did the candidate explore **new approaches or enhancements**?  
+
+🎯 **Exceptional candidates may be invited for an interview and potential recruitment into the team!**  
+
+---
+
+## **💡 Final Notes**
+This challenge simulates **real-world perception tasks** for an autonomous Formula Student car. Candidates should **experiment with different techniques, optimize performance, and deliver a structured, well-documented solution**.  
+
+Good luck, future Driverless Engineers! 🚗💨  
+
