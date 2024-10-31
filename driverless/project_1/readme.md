@@ -12,7 +12,7 @@ Due to some unidentified errors, the saved images are corrupted, here is the exa
 
 ![Screenshot](corrupted.png)
 
-While the rolling shift is easy to correct, the chromatic aberration is more complicated, fortunately during the camera calibration process one of the team member took accurate measurements of the color (color data are provided in the common OpenCV format) of some object in the scene and found the corresponding pixel in the original image:
+While the rolling shift is easy to correct, the color shift is more complicated, fortunately during the camera calibration process one of the team member took accurate measurements of the color (color data are provided in the common OpenCV format) of some object in the scene and found the corresponding pixel in the original image:
 
 Y=541 X=128: [250, 158,  3]  
 Y=267 X=564: [40, 195, 240]
