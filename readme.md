@@ -33,7 +33,7 @@ recruiting-sw-<project-you-chose>
 Then send us the link of the repo so that we will be able to review it.
 
 - Telemetry: Nicolò Marconi (@nicolomarconi (https://t.me/nicolomarconi))
-- Microcontrollers/Steering wheel: Giacomo Mazzucchi (@gmazzucchi (https://t.me/gmazzucchi))
+- Microcontrollers/Steering wheel: Antonio Gelain (@antonio_gelain (https://t.me/antonio_gelain))
 - Driverless: Gabriele Stulzer (@GabrieleStulzer (https://t.me/GabrieleStulzer))
 
 ## Feedback
