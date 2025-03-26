@@ -6,13 +6,6 @@ This test is designed to get an idea of your technical skills and workflow. Assi
 
 You have **2 weeks** to complete the project. Time assigned is not representative of the effort needed to finish the work, it is instead calculated to give you the option of working at your own pace, with plenty of time to **ask questions**.
 
-## Driverless
-
-You have to complete two driverless-specific tasks as specified in the following link on top of one of the many standard [SW recruitment projects](#software) with the specified modality.
-The deadline is still 2 weeks, plenty of time to develop everything.
-
-- [Driverless](./driverless/readme.md)
-
 ## Software
 
 To see the specific assignments please follow one of the following links, based on the team you were assigned to.
@@ -20,6 +13,7 @@ To see the specific assignments please follow one of the following links, based 
 - [Microcontrollers](./microcontrollers/readme.md)
 - [Steering wheel](./steering_wheel/readme.md)
 - [Telemetry](./telemetry/readme.md)
+- [Driverless](./driverless/readme.md)
 
 ## Usage
 
