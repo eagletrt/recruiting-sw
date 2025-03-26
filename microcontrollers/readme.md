@@ -73,7 +73,7 @@ You'll also need to read the USER BUTTON and control the USER LED on the nucleo 
 
 - <b>Init</b>. Initialize everything.
 - <b>Wait Request</b>. The CLI is on, the led is off, sensor reading is off. If the button is pressed go to the Listening state.
-- <b>Listening</b>. The CLI is off and the led is on. Read the sensor, send via serial the data. If the digital value of the hall sensors is high for 5 seconds continuously, then go to the warning state. If the button is pressed, go to the pause state.
+- <b>Listening</b>. The CLI is off and the led is on. Read the sensor, send via serial the data. If the digital value of the hall sensors is high for 5 seconds continuously, then go to the warning state otherwise if the button is pressed, go to the pause state.
 - <b>Pause</b>. The CLI is on, the led is blinking with period 2000 ms and duty cycle of 50% (use a TIMER peripheral), sensor reading is off. If the button is pressed go to the Listening state.
 - <b>Warning</b>. The CLI is off, the led is off, sensor reading is off. You must spam in serial "WARNING". If the button is pressed go to the Wait Request state.
 - <b>Error</b>. Any error you encounter will redirect you here (especially if HAL functions return anything different than HAL_OK). CLI is off, sensor reading is off, the led is blinking with period 400 ms and duty cycle 50% (use a TIMER peripheral). You must spam in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the USER BUTTON (you must reset the board via software).
