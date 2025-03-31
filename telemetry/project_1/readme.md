@@ -59,6 +59,7 @@ The build system that we use is cmake.
 
 ```bash
 mkdir -p build
+cd build
 cmake ..
 make -j$(nproc)
 ```

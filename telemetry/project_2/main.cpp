@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <iostream>
-using namespace std;
 
 extern "C"{
     #include "fake_receiver.h"
@@ -8,7 +7,7 @@ extern "C"{
 
 int main(void){
 
-    cout << "Welcome to Project 2" << endl;
+    std::cout << "Welcome to Project 2" << std::endl;
 
     return 0;
 }
