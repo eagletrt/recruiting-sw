@@ -69,7 +69,14 @@ The challenge consists of **five levels** plus an additional bonus tasks. You ar
 - **LiDAR Version:** Given two point clouds, perform a pose estimation relying on registration algorithms.
 
 **Steps:**
-- **For image:** Extract key features from the two images using feature detection algorithms such as **ORB** and match them with descriptor matchers like **Brute Force**. 
+- **For image:** Extract key features from the two images using feature detection algorithms such as **ORB** and match them with descriptor matchers like **Brute Force**. Make sure to use as the intrinsics matrix for this task
+
+```
+K = [387.3502807617188, 0,                 317.7719116210938,
+     0,                 387.3502807617188, 242.4875946044922,
+     0,                 0,                 1                ]
+```
+
 - **For LiDAR:** Use a point cloud registration algorithm like **ICP (Iterative Closest Point)** to align the two point clouds, and extract the relative transformation between the two. 
 
 ---
