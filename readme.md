@@ -10,6 +10,7 @@ You have **2 weeks** to complete the project. Time assigned is not representativ
 
 To see the specific assignments please follow one of the following links, based on the team you were assigned to.
 
+- [IT & Automation](./it_automation/readme.md)
 - [Microcontrollers](./microcontrollers/readme.md)
 - [Steering wheel](./steering_wheel/readme.md)
 - [Telemetry](./telemetry/readme.md)
