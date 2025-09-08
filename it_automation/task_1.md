@@ -1,9 +1,8 @@
 # IT & Automation Recruitment Task 1
-
 ---
 
 ## Task Description
-You will be given access to an **empty virtual machine (VM)** running **Ubuntu Server**. +
+You will be given access to an **empty virtual machine (VM)** running **Ubuntu Server**. 
 Your goal is to set up and configure a **NocoDB environment using Docker**. 
 Once NocoDB is up and running, you will need to:
 
@@ -35,8 +34,7 @@ By completing this task, you should demonstrate the following:
 ## Tools and Resources
 - **Virtual Machine**:  
   - OS: Ubuntu Server (pre-installed)  
-  - Host: `recruiting-hr1@10.0.9.2`  
-  - Password: stored in **Vaultwarden** (you will receive credentials separately).  
+  - Password: you will receive credentials separately.
 
 - **NocoDB**:  
   - Run using **Docker** (docker-compose recommended).  
@@ -44,7 +42,6 @@ By completing this task, you should demonstrate the following:
   - Default API Endpoint: `http://<vm-ip>:8080` (update based on your configuration).  
 
 - **Python**:  
-  - Recommended: Python 3.10+  
   - Libraries you may need:  
     - `requests` (to interact with NocoDB REST API)  
     - `python-telegram-bot` (to build the Telegram bot)  

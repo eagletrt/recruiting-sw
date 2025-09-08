@@ -42,8 +42,7 @@ By completing this task, you will demonstrate the following:
   - Documentation: [https://docs.github.com/actions](https://docs.github.com/actions).  
 
 - **Self-Hosted Runner**:  
-  - Runner setup guide: [https://docs.github.com/actions/hosting-your-own-runners/about-self-hosted-runners](https://docs.github.com/actions/hosting-your-own-runners/about-self-hosted-runners).  
-
+  - Follow the online runner setup guide
 - **Docker**:  
   - Local registry setup guide: [https://docs.docker.com/registry/](https://docs.docker.com/registry/).  
   - Useful ports: default registry runs on `5000` (e.g., `http://<vm-ip>:5000`).  

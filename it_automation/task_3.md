@@ -18,6 +18,9 @@ You will receive access to several **Ubuntu Server VMs**. On these machines, you
    - Include both the successful steps and the trial-and-error attempts that helped you reach the solution.  
    - Document any resources you consulted (guides, documentation, troubleshooting references).  
 
+4. **Bonus**:
+   - Deploy a test pod with ping/traceroute to ensure communication between nodes.
+   - Deploy a test pod (like *nicolaka/netshoot*) to testing throughput on different nodes.
 ---
 
 ## Objective
