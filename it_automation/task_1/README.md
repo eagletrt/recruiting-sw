@@ -7,17 +7,16 @@ Your goal is to set up and configure a **NocoDB environment using Docker**.
 Once NocoDB is up and running, you will need to:
 
 1. Import data into NocoDB using a **Python script**.  
-   - You will receive a **JSON file** containing example data.  
+   - Download the **JSON files** in this folder containing example data.  
    - Your Python script should parse the JSON and create the corresponding rows in NocoDB via the **REST API**.  
    - Make sure to correctly handle relationships between tables (e.g., one-to-one, one-to-many).  
    - As a **bonus**, you can implement support for **many-to-many relationships**.
 
 2. Implement a **Telegram bot** that interacts with the NocoDB API.  
    - The bot should expose simple commands to demonstrate interaction, for example:  
-     - Retrieving the **ODG (Ordine del Giorno)**.  
+     - Retrieving an **ODG (Ordine del Giorno)** (You can create a table with sample data for it).  
      - Adding a new user directly into the database.  
    - As a **bonus**, you may implement a command to update roles and permissions dynamically 
-    (e.g., syncing with Outline or team-specific access policies).  
 
 ---
 

@@ -1,0 +1,27 @@
+[
+  {
+    "Tag": "CM",
+    "Full Name": "Communication"
+  },
+  {
+    "Tag": "DMT",
+    "Full Name": "Dynamics and Control"
+  },
+  {
+    "Tag": "HW",
+    "Full Name": "Electronics"
+  },
+  {
+    "Tag": "MGT",
+    "Full Name": "Management"
+  },
+  {
+    "Tag": "MT",
+    "Full Name": "Mechanics"
+  },
+  {
+    "Tag": "SW",
+    "Full Name": "Software"
+  }
+]
+
