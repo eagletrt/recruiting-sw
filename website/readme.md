@@ -10,11 +10,10 @@ You are asked to:
 2. Develop the website based on the previous design
 
 The website should consist at least of three pages: Home, About and Contacts.
-
-create a light mode and a dark mode for each page.
+Create a light mode and a dark mode for each page.
 
 ### **Overview**
-Each level introduces new challenges in vehicle control, ranging from basic kinematic modeling to advanced feedback control techniques. Candidates will earn **points** for each completed level.
+Each level introduces new challenges for the website frontend. Candidates will earn **points** for each completed level.
 
 | **Level** | **Task** | **Description** |
 |-----------|----------|-----------------|
@@ -27,7 +26,6 @@ Each level introduces new challenges in vehicle control, ranging from basic kine
 | **Bonus 2** | **Performance & Polish** | Optimize for mobile touch interactions, implement lazy loading for images/video, add smooth scrolling navigation, ensure WCAG accessibility standards, optimize CSS for minimal file size, add loading animations and error states for form validation |
 
 ## Requirements
-
 The following requirements **have to** be followed.
 
 ### Color palette
@@ -35,14 +33,14 @@ The following requirements **have to** be followed.
 - **Pure White (#ffffff)**: as secondary color
 - **Yellow E-Agle (#f3ff14)**: as accent color 
 
-> [!TIP] You can use the 60-30-10 rule to balance the colors: 60% dominant, 30% secondary and 10% accent
+> [!TIP]
+> You can use the 60-30-10 rule to balance the colors: 60% dominant, 30% secondary and 10% accent
 
 ### Typography
 - Font: **Helvetica Neue**
 - Use a clear font hierarchy between titles and text
 
 ### Style
-
 - Minimal and modern design
 - Avoid adding too much elements if not needed
 - Avoid overuse of animations
@@ -56,7 +54,7 @@ The following requirements **have to** be followed.
 ### Page 1 - Home
 ### Sections to be implemented
 1. Navbar
-2. Hero section ( full screen)
+2. Hero section (full screen)
     - Solid black background
     - Large, centered title: “Minimal design, maximum impact.” (or similar)
     - Yellow call-to-action button
