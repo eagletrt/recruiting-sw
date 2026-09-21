@@ -58,33 +58,47 @@ Common Features:
 
 ## The task
 
-The task is composed by the firmware on the nucleo board and the software to plot the data (you can use existing software if you find it).
+The task is divided in steps, each step is a milestone. Each step is given in logical and difficulty order. You will be graded on how many steps you complete and how well you implement them. You MUST commit your code FREQUENTLY to your git repository, as this will be used to evaluate your work. 
 
 ### Firmware on the nucleo
 
-Your task is to read the hall sensor, both in analog (using the ADC in DMA mode) and digital value (using a GPIO input with interrupt), possibly apply some filters and send the data to serial. Then implement a small CLI with three commands:
+#### Step 1
+
+Your task is to read the NTC thermistor and the potentiometer, both in analog (using the ADC in DMA mode) and digital value (using a GPIO input with interrupt), possibly apply some filters and send the data to serial. Then implement a small CLI with three commands:
 - `raw`: remove all filters
 - `moving average`: apply a moving average filter with 150 elements
 - `random noise`: add artificial random noise <em>ad libitum</em>
 
-You'll also need to read the USER BUTTON and control the USER LED on the nucleo board. The logic should follow this FSM.
+#### Step 2
 
-![FSM](./media/fsm.png)
+You will need to implement a small FSM (Finite State Machine) to control the behavior of the system. The FSM should have the following states:
+- <b>POST</b>. Power On Self Test, check if the sensors are working correctly. If not, go to the Error state. Else, go to the Waiting state.
+- <b>Waiting</b>. The CLI is on, the board led is on and the external LED is off, sensor reading is off. If the button is pressed or the command `run` is received, go to the Listening state.
+- <b>Listening</b>. The CLI is off and the led is blinking period 200ms duty cycle 50% (use a TIMER peripheral). Read the sensor, send via serial the data the same as in step 1. If the difference between the thermistor and potentiometer is greater than a predefined threshold for 5 seconds continuously, then go to the warning state otherwise if the button is pressed or the command `pause` is received, go to the pause state.
+- <b>Pause</b>. The CLI is on, the led is blinking with period 2000 ms and duty cycle of 50% (use a TIMER peripheral), sensor reading is off. If the button is pressed or the command `run` is received, go to the Listening state.
+- <b>Warning</b>. The CLI is off, the led is off, sensor reading is off. You must spam every 200 ms in serial "WARNING". If the button is pressed for more than 2 seconds, go to the Waiting state. If this state persists for more than 10 seconds, go to the Error state.
+- <b>Error</b>. Any error you encounter will redirect you here (especially if HAL functions return anything different than HAL_OK). CLI is off, sensor reading is off, the led is blinking with period 40 ms and duty cycle 50% (use a TIMER peripheral). You must spam every 40 ms in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the reset button.
 
-- <b>Init</b>. Initialize everything.
-- <b>Wait Request</b>. The CLI is on, the led is off, sensor reading is off. If the button is pressed go to the Listening state.
-- <b>Listening</b>. The CLI is off and the led is on. Read the sensor, send via serial the data. If the digital value of the hall sensors is high for 5 seconds continuously, then go to the warning state otherwise if the button is pressed, go to the pause state.
-- <b>Pause</b>. The CLI is on, the led is blinking with period 2000 ms and duty cycle of 50% (use a TIMER peripheral), sensor reading is off. If the button is pressed go to the Listening state.
-- <b>Warning</b>. The CLI is off, the led is off, sensor reading is off. You must spam in serial "WARNING". If the button is pressed go to the Wait Request state.
-- <b>Error</b>. Any error you encounter will redirect you here (especially if HAL functions return anything different than HAL_OK). CLI is off, sensor reading is off, the led is blinking with period 400 ms and duty cycle 50% (use a TIMER peripheral). You must spam in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the USER BUTTON (you must reset the board via software).
+#### Step 3
 
-If you like, you can use [this library](https://github.com/pbosetti/gv_fsm/) for generating FSM code. Otherwise feel free to implement your own.
+Create unit tests for the modules you implemented. You must use the native environment of platformio to run the tests. You can use the [Unity](http://www.throwtheswitch.org/unity) framework for this purpose. (A sample configuration and test is provided in the `test` folder).
 
-### Software on the host PC
+#### Step 4
 
-On the host PC, plot real time both the analog and digital value from the serial in 2 different plots. You can use anything you want. From the hall sensors data you receive via serial, modulate the signal <em>ad libitum</em> to play sound. If you use C/C++, [Miniaudio](https://miniaud.io/index.html) is a recommended audio library.
+- While in the waiting state the external LED should have a breathing effect (PWM with period 2 seconds and duty cycle 0-100%). The breathing effect should be implemented using a timer peripheral. The breathing effect should be disabled when the system is in any other state.
+- 
 
-## You can start!
+#### Step 4
+
+Implement a simple serial interface on the host PC to receive the data from the MCU and plot it in real time. You can use any programming language you want. The data should also control the modulation of a sound signal (this part is intentionally vague, extra points for creative solutions).
+
+#### Step 5
+
+Use the timebase library to implement a simple scheduler that will allow you to run multiple tasks in parallel. You can use this to implement two separate FSMs, one for the sensor readings and one for the led control. Other FSM agnostic tasks can be implemented through this scheduler like serial communication and timer management.
+
+## Requirements
+
+All code must follow standard code structure: ./Core/Tests/ for unit tests, ./Core/Inc/ for hardware specific header files, ./Core/Inc/rec/ for the hardware agnostic header files, ./Core/Src/ for hardware specific source files, ./Core/Inc/rec/ for the hardware agnostic source files. Each module should have its own folder within these directories. You can create additional folders if you need to, but the structure must be clear and easy to follow.
 
 - Create a new GitHub repository and upload the project files via git, start working on the task, creating git commits as you make progress
 - When it's time to deliver, please send your recruiter a link to your github repository
