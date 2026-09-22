@@ -4,25 +4,23 @@
 
 ## Abstract
 
-Our live telemetry UI is written in C++, but everything that happens *after* the session — post-processing, vehicle dynamics analysis, prototyping of engineering tools — is done in Python. This project is about that side of the job.
+Our live telemetry UI is written in C++, but everything that happens *after* the session — post-processing, vehicle dynamics analysis, machine learning, prototyping of engineering tools — is done in Python. This project is about that side of the job.
 
 You are given a **raw log recorded by our car (Hydra) at Varano in September 2024**, during an Endurance run of a test weekend. Your task is to build a **standalone, interactive Streamlit application** that a trackside engineer can use to compare how the track is being attacked across the laps and the stints of that session.
 
 This is not a "plot the CSV" exercise: the data is exactly as it came off the car, with all the noise, the asynchronous sampling and the approximate metadata that a real log has. **Handling that is part of the task.** We care more about the soundness of your reasoning than about the number of features you cram into the UI.
 
-Read [`data.md`](./data.md) before starting: it describes the log structure, the physical meaning and units of every channel you need, and the known issues of this dataset.
+Read [`data.md`](./data.md) before starting: it describes the log structure and the physical meaning and units of every channel you need. What it does not do is tell you what is wrong with the data — finding that out is the first half of the job.
 
 ## The dataset
 
-Download link: **TBD — ask your recruiter**
-
-You get **one session**: the Endurance run of 8 September 2024 at Varano. 2207 s of acquisition, 23 timed laps, about 20 km covered — the richest log of that test. One folder, containing:
+The log is in this folder, under [`2024_09_08_14_38_41_ENDURANCE_run1/`](./2024_09_08_14_38_41_ENDURANCE_run1): the Endurance run of 8 September 2024 at Varano. 2207 s of acquisition, 23 timed laps, about 20 km covered — the richest log of that test. It contains:
 
 - `session_config.json` — track, layout, driver, run name
 - `laps.json` — lap and sector boundaries as detected on track by the lap counter
 - `car_config.json` — setup of the car for this run
 - `centerline.json` — the reference line of the layout, resampled at 1 m
-- `parsed/` — the CAN bus and GPS logs already decoded into CSV, one file per message
+- `parsed/` — the CAN bus and GPS logs already decoded into CSV, one file per message, gzipped to keep the repository small (`pd.read_csv("...csv.gz")` opens them as they are, no extra step)
 
 > This is a full FSAE Endurance run. Keep in mind **how an Endurance event is run** when you look at the lap list — the session metadata does not tell you the whole story.
 
@@ -52,7 +50,16 @@ Then, inside a lap, segment the corners into driving phases. We are interested i
 
 Turn the segmentation into a quantitative description of a driver's style: per-corner and per-lap features (braking point and intensity, how long throttle and brake overlap, how aggressively the steering is applied, how the car is rotated, consistency between laps, ...) and an analysis on top of them — statistics, clustering, dimensionality reduction, your call.
 
-The question you are answering is the one an engineer actually asks: **"in what way do these two drivers drive this corner differently, and what does it cost in lap time?"**
+The question you are answering is the one an engineer actually asks: **"in what way is this corner being driven differently, and what does it cost in lap time?"**
+
+**Machine learning is welcome here**, and this dataset gives it real things to chew on. Some directions that work:
+
+- **unsupervised clustering** of the per-corner feature vectors — do corner approaches fall into distinct styles on their own, without you labelling anything?
+- **dimensionality reduction** on those features, to see how laps sit relative to each other in one picture;
+- **change-point or anomaly detection** over the session, to find where behaviour shifts rather than assuming where it should;
+- a **supervised model** that predicts which part of the session a lap or a corner comes from — interesting not for its accuracy, but for what its feature importances say about where the difference actually lives.
+
+Two caveats, and we mean both. First, the output has to be interpretable: an engineer cannot act on "cluster 2", they act on "here the car brakes 8 m later and carries 3 km/h more through the apex". Translating the model's output back into vehicle dynamics is the part we will ask you about. Second, a well-chosen statistical approach is a complete answer too — do not add a model in order to have one, and do not hide a weak feature set behind a strong classifier.
 
 ### 5. The Streamlit dashboard
 
@@ -69,7 +76,7 @@ Build a dashboard that lets a race engineer:
 - **Analytical approach** — the logic behind your definition of "driving style" and how mathematically sound it is. A simple method you can defend beats a complex one you cannot.
 - **Code quality and architecture** — clean, modular, documented Python. Data layer, analysis layer and UI layer should not be the same file.
 - **UI/UX for engineers** — is this usable trackside, or is it a demo?
-- **Honesty about the data** — we know what is wrong with these logs. Telling us what you found, and what you decided to do about it, counts in your favour.
+- **Honesty about the data** — this log has its quirks, and we know what they are. Telling us what you found, and what you decided to do about it, counts in your favour.
 
 Not required, but appreciated: tests on the analysis functions, a short profiling note if you had to deal with the size of the logs, a request to us for anything that is missing.
 
@@ -86,7 +93,13 @@ Not required, but appreciated: tests on the analysis functions, a short profilin
 
 - `git` and a [GitHub](https://github.com) account
 - Python 3.10+
-- The dataset (ask your recruiter for the link)
+
+### Setup
+
+- Download the project files [here](https://download-directory.github.io/?url=https%3A%2F%2Fgithub.com%2Feagletrt%2Frecruiting-sw%2Ftree%2Fmaster%2Ftelemetry%2Fproject_3) — the log comes with them
+- Create a new GitHub repository and upload your work via git
+- Start working on the task, creating git commits as you make progress
+- When it's time to deliver, please send your recruiter a link to your github repository
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate

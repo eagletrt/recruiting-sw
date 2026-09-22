@@ -21,7 +21,7 @@ The car has two CAN buses (`primary` and `secondary`) plus a u-blox GPS. The tel
     └── gps_0/               decoded u-blox UBX messages
 ```
 
-Every CSV has the same shape: a `_timestamp` column, then one column per signal of that CAN message.
+The CSVs are shipped gzipped (`.csv.gz`) to keep the repository small; `pandas.read_csv` opens them directly, there is nothing to unpack. Every one of them has the same shape: a `_timestamp` column, then one column per signal of that CAN message.
 
 **`_timestamp` is a Unix timestamp in microseconds**, taken when the telemetry unit received the frame. It is the only thing that links the files together: each message has its own rate and its own timeline, so **nothing is sampled on a common clock**. Aligning them is your job (`pandas.merge_asof` is your friend, but think about what you are doing with it).
 
@@ -68,11 +68,11 @@ These are **not sensors**. They are produced on board by our state estimator, wh
 
 ### GPS
 
-`parsed/gps_0/GPS_NAV_PVT.csv` is the full u-blox navigation solution at ~7.6 Hz: `lat`, `lon` (degrees), `gSpeed` (ground speed, m/s), `headMot`, plus quality indicators (`fixType`, `numSV`, `hAcc`). In the Endurance session the fix is 3D with ~30 satellites and ~17 cm horizontal accuracy, so it is a solid reference — but at 7.6 Hz it is far too slow to see a braking event.
+`parsed/gps_0/GPS_NAV_PVT.csv` is the full u-blox navigation solution at ~7.6 Hz: `lat`, `lon` (degrees), `gSpeed` (ground speed, m/s), `headMot`, plus quality indicators (`fixType`, `numSV`, `hAcc`). The fix here is 3D throughout, so it is a solid reference — but at 7.6 Hz it is far too slow to see a braking event.
 
 ### Lap timing
 
-`laps.json` is the output of the on-track lap counter: a list of laps with `startTimestamp`, `endTimestamp` and the sector crossing timestamps, all in the same microsecond Unix clock as the CSVs. **This is the reliable source of lap boundaries.** The first entry has no `number`: it is everything recorded before the first crossing of the finish line, which here includes the whole time the logger was running in the paddock.
+`laps.json` is the output of the on-track lap counter: a list of laps with `startTimestamp`, `endTimestamp` and the sector crossing timestamps, all in the same microsecond Unix clock as the CSVs. **This is the reliable source of lap boundaries.** The first entry has no `number`: it is everything recorded before the first crossing of the finish line.
 
 Lap boundaries being reliable does not make every lap a racing lap. Read the list before you use it.
 
@@ -87,23 +87,13 @@ Do *not* use `secondary/tlm_lap_time.csv` for lap times: `lap_time` there is the
 - `theta` — heading of the line, unwrapped, in radians
 - `curvature` — 1/m, signed; **the cheapest way to find where the corners are** without any detection at all
 
-For the Endurance layout this line is 805 m long and was rebuilt from the median of 17 clean laps; the individual laps sit within ~1.1 m of it. Projecting a lap onto it gives a monotonic distance coordinate — but doing that projection, and deciding whether you even want to, is up to you.
-
-## Known issues
-
-We are telling you these up front because they are properties of the log, not puzzles:
-
-1. **Estimated position is noisy at full rate.** `vehicle_position` is published at ~97 Hz, and the jitter on it is comparable to the distance travelled between two samples. Integrate it raw and you get 856 m for a lap that is really ~805 m — a 6% error that is pure noise, not drift. Low-pass it before you differentiate or integrate anything. Decimated to ~10 Hz it agrees with GPS to within a metre.
-2. **Laps are not all the same length.** The reference line is the median of the clean laps, 805 m, but the individual laps spread over roughly ±8 m around it, because different lines through the same corner are different distances. Do not expect your distance axis to close on exactly the same number every lap — that spread is part of what you are measuring.
-3. **A third of the session is not running.** Of 2207 s of acquisition, about 1480 s have the car moving; the rest is paddock, pit and standing still with the logger on. Filter it out, and say how.
-4. **Metadata is not gospel.** `session_config.json` has a single `driver` field, filled in by whoever started the acquisition. It is right about the track and the layout. It is not always the whole story about who drove.
-5. **Sensor offsets.** Brake pressure and steering do not always read exactly zero at rest. Check the offsets before thresholding on them.
+For the Endurance layout this line is 805 m long and was rebuilt from the median of the clean laps of this session. Projecting a lap onto it gives a monotonic distance coordinate — but doing that projection, and deciding whether you even want to, is up to you.
 
 ## What is not in the package
 
 For the record, so that you know what exists on the car and why you are not seeing it:
 
 - **Channels that are empty in this session** — sensors that were not mounted or not working that day (rear wheel speeds, damper travel, tyre pressures and temperatures). They are in the log as a header with no rows; we dropped them rather than have you discover them one by one.
-- **The on-board curvilinear coordinate** (`vehicle_curvilinear_coordinates.csv`, the car's own `s`/`n` along the track) and the baseline files it is derived from. The baseline generator of that season had a bug, so the coordinate it produces in this log runs backwards for half the samples. It has since been fixed on the car; the `centerline.json` you get was rebuilt from this session's own laps. This is the reason requirement 2 exists.
+- **The on-board curvilinear coordinate** (`vehicle_curvilinear_coordinates.csv`, the car's own `s`/`n` along the track) and the baseline files it is derived from. The baseline generator of that season had a bug, so the coordinate it produces in this log is unusable. It has since been fixed on the car; the `centerline.json` you get was rebuilt from this session's own laps. This is the reason requirement 2 exists.
 - **The raw dumps** (`candump.log`, ~500 MB, and `gps_0.log`) and the battery, charger and low-voltage messages. Nothing there is useful for driving style, and the decoded CSVs already contain everything you need.
 - **The `simulator/` folder**, which holds signals replayed from our simulator rather than measured on track.
