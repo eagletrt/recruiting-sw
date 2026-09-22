@@ -6,57 +6,64 @@
 
 Our live telemetry UI is written in C++, but everything that happens *after* the session — post-processing, vehicle dynamics analysis, machine learning, prototyping of engineering tools — is done in Python. This project is about that side of the job.
 
-You are given a **raw log recorded by our car (Hydra) at Varano in September 2024**, during an Endurance run of a test weekend. Your task is to build a **standalone, interactive Streamlit application** that a trackside engineer can use to compare how the track is being attacked across the laps and the stints of that session.
+You are given a **raw log recorded by our car (Hydra) at Varano in September 2024**. Your task is to build a **standalone, interactive Streamlit application** that answers the question a race engineer asks after every session:
 
-This is not a "plot the CSV" exercise: the data is exactly as it came off the car, with all the noise, the asynchronous sampling and the approximate metadata that a real log has. **Handling that is part of the task.** We care more about the soundness of your reasoning than about the number of features you cram into the UI.
+> **Where is the car being driven differently, what is that worth in lap time, and what would have to change to get it back?**
 
-Read [`data.md`](./data.md) before starting: it describes the log structure and the physical meaning and units of every channel you need. What it does not do is tell you what is wrong with the data — finding that out is the first half of the job.
+This is not a "plot the CSV" exercise. The log is what came off the car: channels on their own clocks, no lap list, no annotations, nothing telling you how the session is structured. Working that out is the first half of the task.
+
+Read [`data.md`](./data.md) before starting: it describes the log structure and the physical meaning and units of every channel.
+
+## The objective
+
+By the end you should be able to put a number on a sentence like *"through the corner at 580 m the car is 4 m/s slower, which costs 0.3 s a lap, and it is because the brakes are released 10 m earlier and the throttle comes back 15 m later."*
+
+Getting there means, roughly:
+
+1. deciding what a comparable piece of driving is, and finding those pieces in the log;
+2. describing how each corner is attacked, in numbers rather than in pictures;
+3. turning those numbers into time won and lost, and into something actionable.
+
+How you get there is yours to design. What we care about is that each step holds up when we ask why.
 
 ## The dataset
 
-The log is in this folder, under [`2024_09_08_14_38_41_ENDURANCE_run1/`](./2024_09_08_14_38_41_ENDURANCE_run1): the Endurance run of 8 September 2024 at Varano. 2207 s of acquisition, 23 timed laps, about 20 km covered — the richest log of that test. It contains:
+The log is in this folder, under [`2024_09_08_14_38_41_ENDURANCE_run1/`](./2024_09_08_14_38_41_ENDURANCE_run1): 2207 s of acquisition, about 20 km covered. It contains:
 
-- `session_config.json` — track, layout, driver, run name
-- `laps.json` — lap and sector boundaries as detected on track by the lap counter
-- `car_config.json` — setup of the car for this run
-- `centerline.json` — the reference line of the layout, resampled at 1 m
-- `parsed/` — the CAN bus and GPS logs already decoded into CSV, one file per message, gzipped to keep the repository small (`pd.read_csv("...csv.gz")` opens them as they are, no extra step)
+- `parsed/` — the CAN bus and GPS logs decoded into CSV, one file per message, gzipped (`pd.read_csv("...csv.gz")` opens them as they are)
+- `centerline.json` — the reference line of the layout
 
-The log is the one thing here we have touched: channels that are empty in this session are gone, and the track reference and the curvilinear coordinate have been rebuilt, because the version the car produced that season was affected by a bug. `data.md` says exactly what was changed.
-
-> This is a full FSAE Endurance run. Keep in mind **how an Endurance event is run** when you look at the lap list — the session metadata does not tell you the whole story.
-
-One session is enough: there is more usable driving in it than in the rest of the test weekend put together, and everything you need to compare two ways of driving the same track is already inside it.
+> The car does not run continuously for 2207 s, and it is not driven the same way throughout. Work out the structure of the session from the data before you assume anything about it.
 
 ## Core requirements
 
 ### 1. Data loading and preprocessing
 
-Every CAN message is logged on its own timeline, at its own rate, with microsecond Unix timestamps. Build a loader that turns a session folder into something you can actually do vehicle dynamics on.
+Every CAN message is logged on its own timeline, at its own rate, with microsecond Unix timestamps. Build a loader that turns the session folder into something you can actually do vehicle dynamics on.
 
-We expect you to reason about (and document) at least: the common time base you resample onto and why, how you filter the signals that need it, how you deal with channels logged at rates that differ by an order of magnitude, and how you decide what is "the car moving on track" versus paddock, pit and stationary time.
+We expect you to reason about (and document) at least: the common time base you resample onto and why, how you filter the signals that need it, how you deal with channels logged at rates that differ by an order of magnitude, and how you separate the car driving on track from everything else in the log.
 
 ### 2. A distance axis
 
 Comparing laps in the time domain is useless — two laps drift apart after the first corner. Everything you compare has to live on a **distance axis**.
 
-The raw material is there: every position sample carries the distance along the lap (`s`, see `data.md`). What is not done for you is the part that matters. `s` is sampled on the position channel's clock, not on a regular distance grid; every other channel sits on its own timeline; and the laps are not all exactly the same length. Getting speed, pedals, steering and accelerations onto one common distance grid, so that lap 6 and lap 18 can actually be subtracted from each other, is your job.
+The raw material is there: every position sample carries the distance along the track (`s`, see `data.md`). What is not done for you is the part that matters. `s` is sampled on the position channel's clock, not on a regular distance grid; every other channel sits on its own timeline; and no two laps are exactly the same length. Getting speed, pedals, steering and accelerations onto one common distance grid, so that two laps can actually be subtracted from each other, is your job.
 
-Show that your grid is consistent lap to lap, and say what you did at the seams — the start/finish wrap, and the laps where the car is not going round.
+Show that your grid is consistent lap to lap, and say what you did at the seams.
 
-### 3. Lap and corner-phase segmentation
+### 3. Segmentation
 
-Split the session into laps, discarding in-laps, out-laps and anything that is not a representative flying lap. Justify what you discard — and look at the lap list before you assume it is 23 equivalent laps.
+Split the session into laps, and the laps into the pieces worth comparing. Discard whatever is not representative, and justify what you discard.
 
-Then, inside a lap, segment the corners into driving phases. We are interested in how a driver approaches a corner, so at a minimum: **braking point, braking phase, trail braking, minimum speed / apex, throttle application on exit**. The algorithm is yours to design — thresholds, state machine, change-point detection, clustering on the pedal/steer/acceleration signals, whatever you can defend.
+Then, inside a lap, segment the corners into driving phases: at a minimum **braking point, braking phase, trail braking, minimum speed / apex, throttle application on exit**. The algorithm is yours to design — thresholds, state machine, change-point detection, clustering on the pedal, steering and acceleration signals, whatever you can defend.
 
-### 4. Driving style characterisation
+### 4. Driving style, and what it costs
 
-Turn the segmentation into a quantitative description of a driver's style: per-corner and per-lap features (braking point and intensity, how long throttle and brake overlap, how aggressively the steering is applied, how the car is rotated, consistency between laps, ...) and an analysis on top of them — statistics, clustering, dimensionality reduction, your call.
+Turn the segmentation into a quantitative description of how the car is being driven: per-corner and per-lap features — braking point and intensity, how long throttle and brake overlap, how quickly the steering is applied, how much the car is rotated, how consistent one lap is with the next.
 
-The question you are answering is the one an engineer actually asks: **"in what way is this corner being driven differently, and what does it cost in lap time?"**
+Then close the loop and **put time on it**. The speed difference between two pieces of driving integrates into a time difference along the lap, and that tells you where it is won and where it is lost. A corner where one is 4 m/s faster and a corner where the other gains half of it back are a different story from an overall pace gap, and only the distance-resolved version distinguishes them.
 
-**Machine learning is welcome here**, and this dataset gives it real things to chew on. Some directions that work:
+**Machine learning is welcome here**, and this dataset gives it real things to chew on:
 
 - **unsupervised clustering** of the per-corner feature vectors — do corner approaches fall into distinct styles on their own, without you labelling anything?
 - **dimensionality reduction** on those features, to see how laps sit relative to each other in one picture;
@@ -69,9 +76,10 @@ Two caveats, and we mean both. First, the output has to be interpretable: an eng
 
 Build a dashboard that lets a race engineer:
 
-- select and overlay laps and stints, individually or grouped;
-- see the raw traces (speed, pedals, steering, accelerations) plotted against the distance axis, overlaid and aligned;
-- see the output of your segmentation and of your style analysis — for example the phases highlighted on the traces, the corners coloured on a track map, a scatter or table comparing corners between drivers;
+- select and overlay laps, individually or grouped;
+- see the traces (speed, pedals, steering, accelerations) plotted against the distance axis, overlaid and aligned;
+- see where time is won and lost along the lap, not just in total;
+- see the output of your segmentation and of your style analysis — the phases highlighted on the traces, the corners coloured on a track map, a table comparing corners;
 - get to an actionable insight quickly. Assume the person using it has 5 minutes between two runs, not an afternoon.
 
 ## What we evaluate
@@ -80,7 +88,7 @@ Build a dashboard that lets a race engineer:
 - **Analytical approach** — the logic behind your definition of "driving style" and how mathematically sound it is. A simple method you can defend beats a complex one you cannot.
 - **Code quality and architecture** — clean, modular, documented Python. Data layer, analysis layer and UI layer should not be the same file.
 - **UI/UX for engineers** — is this usable trackside, or is it a demo?
-- **Honesty about the data** — this log has its quirks, and we know what they are. Telling us what you found, and what you decided to do about it, counts in your favour.
+- **Honesty about the data** — this log has its quirks. Telling us what you found, and what you decided to do about it, counts in your favour.
 
 Not required, but appreciated: tests on the analysis functions, a short profiling note if you had to deal with the size of the logs, a request to us for anything that is missing.
 
