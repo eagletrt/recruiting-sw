@@ -1,5 +1,7 @@
 # Microcontroller recruiting task
 
+**Please before starting the task read the entire document carefully more than once and make sure you understand the requirements.**
+
 ## What you are given
 - 1 Nucleo board (STM32C031C6)
 - 1 small board with a potentiometer, a voltage divider containing an NTC thermistor and a led.
@@ -122,8 +124,42 @@ All code must follow standard code structure: ```./Core/Tests/``` for unit tests
 - All functions must be documented with Doxygen style comments. You can use the [Doxygen](https://www.doxygen.nl/) tool to generate documentation from your code.
 - You must create a comprehensive README file that explains how to build and run your code, as well as how to use the CLI commands. The README file should also include a description of the FSM states and their transitions.
 
-Example file structure:<br>
-<img src="./media/example_filestructure.png" alt="drawing" height="500"/>
+Example file structure:
+```
+/
+├── Core
+│   ├── Inc
+│   │   ├── recruiting
+│   │   │   ├── module_name
+│   │   │   │   ├── module-name.h
+│   │   │   │   └── module-name-api.h
+│   │   │   └── temperature
+│   │   │       ├── temperature.h
+│   │   │       └── temperature-api.h
+│   │   ├── gpio.h
+│   │   ├── main.h
+│   │   └── stm...
+│   └── Src
+│       ├── recruiting
+│       │   ├── module_name
+│       │   │   └── module-name-api.c
+│       │   └── temperature
+│       │       └── temperature-api.c
+│       ├── gpio.c
+│       ├── main.c
+│       └── stm...
+├── Drivers
+├── lib
+├── test
+│   ├── test_example
+│   │   └── test-example.c
+│   └── test_temperature
+│       └── test-temperature.c
+├── platformio.ini
+├── project_name.ioc
+├── startup_stm32xxxxxx.s
+└── STM32xxxxxx_FLASH.ld
+```
 ## Tips
 - You have 2 full weeks of time to complete the task. Early submission will not be taken into account for evaluation so do not rush, take your time to implement the task correctly and cleanly. 
 - Read this document again carefully and make sure you understand the requirements before starting to implement the task. We do not expect you to know everything about embedded programming, but we do expect you to be able to learn and apply new concepts quickly. Use the internet, forums, and documentation to your advantage.
