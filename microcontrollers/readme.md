@@ -61,7 +61,7 @@ The task is divided in steps, each step is a milestone. Each step is given in lo
 
 #### Step 1 (mandatory)
 
-Your task is to read the NTC thermistor and the potentiometer in analog (using the ADC in DMA circular mode) and the digital value of the user button (using an EXTI line), possibly apply some filters and send the data to serial. Then implement a small CLI with three commands (you can change the grammar):
+Your task is to read the NTC thermistor and the potentiometer in analog (using the ADC in DMA circular mode) and the digital value of the user button (using an EXTI line), apply some filters and send the data to serial. Then implement a small CLI with three commands (you can change the grammar):
 - `raw`: remove all filters
 - `moving average`: apply a moving average filter with 150 elements
 - `random noise`: add artificial random noise <em>ad libitum</em>
@@ -71,19 +71,19 @@ Example output (this is just an example, you can change the grammar and the outp
 POT_RAW:2048,POT_C:24.3,NTC_RAW:1780,NTC_C:31.7\r\n
 ```
 
-There must be 2 modes, a cli mode and a streaming mode. In the streaming mode the board is sending the data to serial every 100 ms. Then after the button is pressed the mode should switch to cli mode, where the user can send commands to the board. 
+There must be 2 modes, a cli mode and a streaming mode. In the streaming mode the board is sending the data to serial every 100 ms. Then after the button is pressed the mode should switch to cli mode, where the user can send commands to the board. Another button press should switch back to streaming mode.
 
 #### Step 2 (mandatory)
 
 <img src="./media/first_fsm.drawio.png" alt="first fsm" width="400"/>
 
 You will need to implement a small FSM (Finite State Machine) to control the behavior of the system (using the [libfsm-sw](https://github.com/eagletrt/libfsm-sw) library on the dev branch). The FSM should have the following states:
-- <b>POST</b>. Power On Self Test, check if the sensors are working correctly. If not, go to the Error state. Else, go to the Waiting state.
+- <b>POST</b>. Power On Self Test, check if the sensors are working correctly. If not, go to the Fatal state. Else, go to the Waiting state.
 - <b>Waiting</b>. The CLI is on, the board led is on flashing with 500ms period and 15% duty cycle, sensor reading is off. If the button is pressed or the command `run` is received, go to the Listening state. While in the waiting state the external LED should have a breathing effect (PWM with period 2 seconds and duty cycle 0-100%). The breathing effect should be implemented using a timer peripheral. 
 - <b>Listening</b>. The CLI is off and the board led is blinking with period 200ms duty cycle 80% (use a TIMER peripheral). Read the sensor, send via serial the data the same as in step 1 every 100 ms. If the value of the thermistor is greater than the value of the potentiometer by a predefined threshold for 5 seconds continuously, then go to the warning state. If the button is pressed go to the pause state. The external LED should indicate the difference of (thermistor - potentiometer) through PWM. The duty cycle should be 0% when the difference is 0 and 100% when the difference is greater than a predefined threshold.
 - <b>Pause</b>. The CLI is on, the board led is blinking with period 2000 ms and duty cycle of 50% (use a TIMER peripheral), sensor reading is off. If the button is pressed or the command `run` is received, go to the Listening state. The external LED should have the same behavior as in the Waiting state.
-- <b>Warning</b>. The CLI is off, the led is off, sensor reading is on. You must spam every 200 ms in serial "WARNING". If the button is pressed for more than 2 seconds, go to the Waiting state. If this state persists for more than 10 seconds, go to the Error state.
-- <b>Error</b>. Any error you encounter will redirect you here (especially if HAL functions return anything different than HAL_OK). CLI is off, sensor reading is off, the led is blinking with period 40 ms and duty cycle 50% (use a TIMER peripheral). You must spam every 100 ms in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the reset button or the user button (software reset).
+- <b>Warning</b>. The CLI is off, the led is off, sensor reading is on. You must spam every 200 ms in serial "WARNING". If the button is pressed for more than 2 seconds, go to the Waiting state. If this state persists for more than 10 seconds, go to the Fatal state.
+- <b>Fatal</b>. Any error you encounter will redirect you here (especially if HAL functions return anything different than HAL_OK). CLI is off, sensor reading is off, the led is blinking with period 40 ms and duty cycle 50% (use a TIMER peripheral). You must spam every 100 ms in serial "ERROR" explaining what error occured. The only way to exit this state is to reset the MCU by pressing the reset button or the user button (software reset).
 
 #### Step 3 (mandatory)
 
@@ -116,7 +116,7 @@ Every (reasonable) extra feature you implement cleanly and correctly will be eva
 
 ## Requirements
 
-All code must follow standard code structure: ```./Core/Tests/``` for unit tests, ```./Core/Inc/``` for hardware specific header files, ```./Core/Inc/rec/``` for the hardware agnostic header files, ```./Core/Src/``` for hardware specific source files, ```./Core/Src/rec/``` for the hardware agnostic source files. Each module should have its own folder within these directories (a sample structure is shown in the image below). You can create additional folders if you need to, but the structure must be clear and easy to follow.
+All code must follow standard code structure: ```./Core/Tests/``` for unit tests, ```./Core/Inc/``` for hardware specific header files, ```./Core/Inc/recruiting/``` for the hardware agnostic header files, ```./Core/Src/``` for hardware specific source files, ```./Core/Src/recruiting/``` for the hardware agnostic source files. Each module should have its own folder within these directories (a sample structure is shown in the image below). You can create additional folders if you need to, but the structure must be clear and easy to follow.
 
 - Your code MUST follow the coding standards given in the [coding standards document](./standards.md). You will be evaluated on how well you follow the coding standards.
 - Create a new GitHub repository, the repository name should be: ```embedded-project``` (do not fork this repo -_-).
