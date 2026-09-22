@@ -72,6 +72,7 @@ Every (reasonable) extra feature you implement cleanly and correctly will be eva
 
 All code must follow standard code structure: ./Core/Tests/ for unit tests, ./Core/Inc/ for hardware specific header files, ./Core/Inc/rec/ for the hardware agnostic header files, ./Core/Src/ for hardware specific source files, ./Core/Src/rec/ for the hardware agnostic source files. Each module should have its own folder within these directories. You can create additional folders if you need to, but the structure must be clear and easy to follow.
 
+- Your code MUST follow the coding standards given in the [coding standards document](./standards.md). You will be evaluated on how well you follow the coding standards.
 - Create a new GitHub repository and upload the project files via git, start working on the task.
 - Create git commits as you make progress, THEY MUST BE FREQUENT AND DESCRIPTIVE [following standard naming](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13). You will be evaluated on your git history as well.
 - All functions must be documented with Doxygen style comments. You can use the [Doxygen](https://www.doxygen.nl/) tool to generate documentation from your code.
