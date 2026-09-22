@@ -1,0 +1,210 @@
+{
+ "laps": [
+  {
+   "startTimestamp": "1725781628357659",
+   "endTimestamp": "1725799180680035"
+  },
+  {
+   "number": 1,
+   "startTimestamp": "1725799180680035",
+   "endTimestamp": "1725799252990074",
+   "sectorsTimestamps": [
+    "1725799202133569",
+    "1725799227716539"
+   ]
+  },
+  {
+   "number": 2,
+   "startTimestamp": "1725799252990074",
+   "endTimestamp": "1725799400732037",
+   "sectorsTimestamps": [
+    "1725799276528456",
+    "1725799374024160"
+   ]
+  },
+  {
+   "number": 3,
+   "startTimestamp": "1725799400732037",
+   "endTimestamp": "1725799467727981",
+   "sectorsTimestamps": [
+    "1725799421296720",
+    "1725799444646391"
+   ]
+  },
+  {
+   "number": 4,
+   "startTimestamp": "1725799467727981",
+   "endTimestamp": "1725799533353224",
+   "sectorsTimestamps": [
+    "1725799487628794",
+    "1725799510603236"
+   ]
+  },
+  {
+   "number": 5,
+   "startTimestamp": "1725799533353224",
+   "endTimestamp": "1725799596605819",
+   "sectorsTimestamps": [
+    "1725799552307135",
+    "1725799574306152"
+   ]
+  },
+  {
+   "number": 6,
+   "startTimestamp": "1725799596605819",
+   "endTimestamp": "1725799659215968",
+   "sectorsTimestamps": [
+    "1725799615453802",
+    "1725799637116644"
+   ]
+  },
+  {
+   "number": 7,
+   "startTimestamp": "1725799659215968",
+   "endTimestamp": "1725799723317907",
+   "sectorsTimestamps": [
+    "1725799678467951",
+    "1725799700665403"
+   ]
+  },
+  {
+   "number": 8,
+   "startTimestamp": "1725799723317907",
+   "endTimestamp": "1725799784738306",
+   "sectorsTimestamps": [
+    "1725799741149616",
+    "1725799762946645"
+   ]
+  },
+  {
+   "number": 9,
+   "startTimestamp": "1725799784738306",
+   "endTimestamp": "1725799845925480",
+   "sectorsTimestamps": [
+    "1725799802736404",
+    "1725799823887180"
+   ]
+  },
+  {
+   "number": 10,
+   "startTimestamp": "1725799845925480",
+   "endTimestamp": "1725799906576526",
+   "sectorsTimestamps": [
+    "1725799863323744",
+    "1725799884578155"
+   ]
+  },
+  {
+   "number": 11,
+   "startTimestamp": "1725799906576526",
+   "endTimestamp": "1725799968135227",
+   "sectorsTimestamps": [
+    "1725799924577479",
+    "1725799946021770"
+   ]
+  },
+  {
+   "number": 12,
+   "startTimestamp": "1725799968135227",
+   "endTimestamp": "1725800029475065",
+   "sectorsTimestamps": [
+    "1725799986002216",
+    "1725800007603075"
+   ]
+  },
+  {
+   "number": 13,
+   "startTimestamp": "1725800029475065",
+   "endTimestamp": "1725800091183126",
+   "sectorsTimestamps": [
+    "1725800047514279",
+    "1725800068975399"
+   ]
+  },
+  {
+   "number": 14,
+   "startTimestamp": "1725800091183126",
+   "endTimestamp": "1725800322880980"
+  },
+  {
+   "number": 15,
+   "startTimestamp": "1725800322880980",
+   "endTimestamp": "1725800390133923",
+   "sectorsTimestamps": [
+    "1725800343579152",
+    "1725800366578297"
+   ]
+  },
+  {
+   "number": 16,
+   "startTimestamp": "1725800390133923",
+   "endTimestamp": "1725800453882691",
+   "sectorsTimestamps": [
+    "1725800409126836",
+    "1725800430913533"
+   ]
+  },
+  {
+   "number": 17,
+   "startTimestamp": "1725800453882691",
+   "endTimestamp": "1725800516807385",
+   "sectorsTimestamps": [
+    "1725800472433901",
+    "1725800493878241"
+   ]
+  },
+  {
+   "number": 18,
+   "startTimestamp": "1725800516807385",
+   "endTimestamp": "1725800578280622",
+   "sectorsTimestamps": [
+    "1725800535276385",
+    "1725800556131232"
+   ]
+  },
+  {
+   "number": 19,
+   "startTimestamp": "1725800578280622",
+   "endTimestamp": "1725800639502705",
+   "sectorsTimestamps": [
+    "1725800596001681",
+    "1725800616801625"
+   ]
+  },
+  {
+   "number": 20,
+   "startTimestamp": "1725800639502705",
+   "endTimestamp": "1725800706719710",
+   "sectorsTimestamps": [
+    "1725800657001002",
+    "1725800683599279"
+   ]
+  },
+  {
+   "number": 21,
+   "startTimestamp": "1725800706719710",
+   "endTimestamp": "1725800768569300",
+   "sectorsTimestamps": [
+    "1725800724188947"
+   ]
+  },
+  {
+   "number": 22,
+   "startTimestamp": "1725800768569300",
+   "endTimestamp": "1725800832126144",
+   "sectorsTimestamps": [
+    "1725800786596804",
+    "1725800809184608"
+   ]
+  },
+  {
+   "number": 23,
+   "startTimestamp": "1725800832126144",
+   "endTimestamp": "1725800894279855",
+   "sectorsTimestamps": [
+    "1725800849893084",
+    "1725800871268414"
+   ]
+  }
+ ]
+}
