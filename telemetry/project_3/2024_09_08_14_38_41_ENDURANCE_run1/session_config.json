@@ -1,0 +1,10 @@
+{
+ "trackLocation": "Varano",
+ "trackLayout": "Endurance",
+ "sessionName": "run1",
+ "driver": "Ivan",
+ "weather": {
+  "ambientTemperature": 6.91691904177745e-323,
+  "trackTemperature": 2.75859452835367e-313
+ }
+}
