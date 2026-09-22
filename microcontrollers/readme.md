@@ -40,13 +40,9 @@ The project is now ready to be built and flashed to the board. You can use the `
 
 (NOTE: VsCode is not required, you can use any IDE of your choice, just install the PIO cli and use the commands above to build and flash the firmware).
 
-### Wiring (to be changed)
-| Label | Meaning        | Connection                  |
-|-------|----------------|-----------------------------|
-| VCC   | Power source   | Connect to 5V of system     |
-| GND   | Ground         | Connect to GND of system    |
-| DO    | Digital Output | Connect to digital IO pin   |
-| AO    | Analog Output  | Connect to analog input pin |
+### Wiring
+
+You will need to connect the voltage divider to the power and ground pins of the nucleo board. The potentiometer and the thermistor will be connected to the ADC pins of the nucleo board. The led will be connected to a timer enabled GPIO pin of the nucleo board. The user button and the board led are already connected to GPIO pins of the nucleo board.
 
 
 ## Prerequisites
