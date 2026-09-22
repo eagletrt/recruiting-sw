@@ -1,5 +1,10 @@
 # Microcontroller recruiting task
 
+## What you are given
+- 1 Nucleo board (STM32F446RE)
+- 1 small board with a potentiometer, a voltage divider containing an NTC thermistor and a led.
+- Some jumpers and wires to connect the boards together.
+
 ## Setting up the development environment
 
 - Download STM32 CubeMX from the [official link](https://www.st.com/en/development-tools/stm32cubemx.html) and install it.
@@ -31,10 +36,7 @@ release        SUCCESS   00:00:07.344
 
 The project is now ready to be built and flashed to the board. You can use the `pio run -t upload` command to flash the firmware to the board. Check that with the `pio device list` command that the board is connected to your computer.
 
-
-## The Tools
-
-Aside from the nucleo board, you will be given a small board with a potentiometer, a voltage divider containing an NTC thermistor and a led.
+(NOTE: VsCode is not required, you can use any IDE of your choice, just install the PIO cli and use the commands above to build and flash the firmware).
 
 ### Wiring (to be changed)
 | Label | Meaning        | Connection                  |
@@ -66,7 +68,7 @@ You must control when the CLI is on and when it is off by using the button.
 
 #### Step 2 (mandatory)
 
-You will need to implement a small FSM (Finite State Machine) to control the behavior of the system. The FSM should have the following states:
+You will need to implement a small FSM (Finite State Machine) to control the behavior of the system (using the [libfsm-sw](https://github.com/eagletrt/libfsm-sw) library on the dev branch). The FSM should have the following states:
 - <b>POST</b>. Power On Self Test, check if the sensors are working correctly. If not, go to the Error state. Else, go to the Waiting state.
 - <b>Waiting</b>. The CLI is on, the board led is on and the external LED is off, sensor reading is off. If the button is pressed or the command `run` is received, go to the Listening state. While in the waiting state the external LED should have a breathing effect (PWM with period 2 seconds and duty cycle 0-100%). The breathing effect should be implemented using a timer peripheral. 
 - <b>Listening</b>. The CLI is off and the board led is blinking with period 200ms duty cycle 80% (use a TIMER peripheral). Read the sensor, send via serial the data the same as in step 1. If the difference between the thermistor and potentiometer is greater than a predefined threshold for 5 seconds continuously, then go to the warning state otherwise if the button is pressed, go to the pause state. The external LED should indicate the difference of (thermistor - potentiometer) through PWM. The duty cycle should be 0% when the difference is 0 and 100% when the difference is greater than a predefined threshold.
