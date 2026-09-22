@@ -54,6 +54,7 @@ These are **not sensors**. They are produced on board by our state estimator, wh
 |---|---|---|
 | `vehicle_speed.csv` | `u`, `v` | Longitudinal and lateral velocity in the vehicle frame, **m/s**. `v` is the sideslip velocity — small, and interesting. |
 | `vehicle_position.csv` | `x`, `y`, `heading` | Position in a local ENU track frame, **metres** from the Varano origin (lat 44.680525, lon 10.022198); `heading` in **radians**. This is what you draw the track map with. |
+| `vehicle_curvilinear_coordinates.csv` | `s`, `n` | Position projected onto the reference line: `s` is the distance along the lap in **metres** (0 → 805, wrapping at the finish line), `n` the signed lateral offset from the line, positive to the left of the direction of travel. Computed offline by projecting `vehicle_position`, smoothed over 0.2 s, onto `centerline.json` — so you can reproduce it, or redo it your own way. |
 | `primary/control_output.csv` | `estimated_velocity` | The scalar speed estimate the traction control actually runs on, **m/s**. Same estimator, published on the primary bus at ~100 Hz. In practice this is the cleanest speed channel in the log; `GPS_NAV_PVT.gSpeed` is the independent ground truth you can validate it against. |
 
 ### Powertrain and controls
@@ -87,13 +88,13 @@ Do *not* use `secondary/tlm_lap_time.csv` for lap times: `lap_time` there is the
 - `theta` — heading of the line, unwrapped, in radians
 - `curvature` — 1/m, signed; **the cheapest way to find where the corners are** without any detection at all
 
-For the Endurance layout this line is 805 m long and was rebuilt from the median of the clean laps of this session. Projecting a lap onto it gives a monotonic distance coordinate — but doing that projection, and deciding whether you even want to, is up to you.
+For the Endurance layout this line is 805 m long and was rebuilt from the median of the clean laps of this session. The projection of this session onto it is already in `vehicle_curvilinear_coordinates.csv`; the line itself is here so that you can redo it, or work on the geometry directly.
 
 ## What is not in the package
 
 For the record, so that you know what exists on the car and why you are not seeing it:
 
 - **Channels that are empty in this session** — sensors that were not mounted or not working that day (rear wheel speeds, damper travel, tyre pressures and temperatures). They are in the log as a header with no rows; we dropped them rather than have you discover them one by one.
-- **The on-board curvilinear coordinate** (`vehicle_curvilinear_coordinates.csv`, the car's own `s`/`n` along the track) and the baseline files it is derived from. The baseline generator of that season had a bug, so the coordinate it produces in this log is unusable. It has since been fixed on the car; the `centerline.json` you get was rebuilt from this session's own laps. This is the reason requirement 2 exists.
+- **The season's baseline files** (`gps_maps.json`, `sampled_baseline.txt`), which describe the track reference. The generator that produced them that year had a bug, which made both them and the curvilinear coordinate the car logged from them unusable. Both have been rebuilt offline for this package: `centerline.json` from this session's own laps, and `vehicle_curvilinear_coordinates.csv` by projecting onto it. The generator has since been fixed on the car.
 - **The raw dumps** (`candump.log`, ~500 MB, and `gps_0.log`) and the battery, charger and low-voltage messages. Nothing there is useful for driving style, and the decoded CSVs already contain everything you need.
 - **The `simulator/` folder**, which holds signals replayed from our simulator rather than measured on track.

@@ -22,6 +22,8 @@ The log is in this folder, under [`2024_09_08_14_38_41_ENDURANCE_run1/`](./2024_
 - `centerline.json` — the reference line of the layout, resampled at 1 m
 - `parsed/` — the CAN bus and GPS logs already decoded into CSV, one file per message, gzipped to keep the repository small (`pd.read_csv("...csv.gz")` opens them as they are, no extra step)
 
+The log is the one thing here we have touched: channels that are empty in this session are gone, and the track reference and the curvilinear coordinate have been rebuilt, because the version the car produced that season was affected by a bug. `data.md` says exactly what was changed.
+
 > This is a full FSAE Endurance run. Keep in mind **how an Endurance event is run** when you look at the lap list — the session metadata does not tell you the whole story.
 
 One session is enough: there is more usable driving in it than in the rest of the test weekend put together, and everything you need to compare two ways of driving the same track is already inside it.
@@ -36,9 +38,11 @@ We expect you to reason about (and document) at least: the common time base you 
 
 ### 2. A distance axis
 
-Comparing laps in the time domain is useless — two laps drift apart after the first corner. You need a **distance (or track position) axis** shared by all laps.
+Comparing laps in the time domain is useless — two laps drift apart after the first corner. Everything you compare has to live on a **distance axis**.
 
-The car does not log one you can use, so you have to build it. You get a reference line for the layout (`centerline.json`, see `data.md`): project onto it, integrate speed, or do something else entirely. Explain the method you chose and show that it is consistent lap to lap.
+The raw material is there: every position sample carries the distance along the lap (`s`, see `data.md`). What is not done for you is the part that matters. `s` is sampled on the position channel's clock, not on a regular distance grid; every other channel sits on its own timeline; and the laps are not all exactly the same length. Getting speed, pedals, steering and accelerations onto one common distance grid, so that lap 6 and lap 18 can actually be subtracted from each other, is your job.
+
+Show that your grid is consistent lap to lap, and say what you did at the seams — the start/finish wrap, and the laps where the car is not going round.
 
 ### 3. Lap and corner-phase segmentation
 
