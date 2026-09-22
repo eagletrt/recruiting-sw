@@ -2,7 +2,34 @@
 
 ## Setting up the development environment
 
-put platformio
+- Download STM32 CubeMX from the [official link](https://www.st.com/en/development-tools/stm32cubemx.html) and install it.
+- Create a new project selecting the nucleo board you have been assigned.
+- Once created the project, go to "Project Manager", fill out the project name, location and select "Makefile" as toolchain. Then go into code generator and assure that ```Generate peripheral initialization code in separate files``` is checked. Then click on "GENERATE CODE".
+
+<img src="./media/cubemx_generation.png" alt="drawing" width="900"/>
+
+- Open the generated folder in VsCode (you should see something like this).
+- Install the platformio extension.
+
+- Run `pio init` to generate the platformio project files, there is a sample configuration file provided in the [`platformio.ini`](./sample_platformio.ini) file, you can modify it if you need to. You can also use the `pio init --ide vscode` command to generate the project files for VsCode.
+
+- Then run `pio update` to install the required packages and finally run `pio run` to build the project. If everything is set up correctly, you should see a message like this:
+
+```
+Advanced Memory Usage is available via "PlatformIO Home > Project Inspect"
+RAM:   [          ]   0.4% (used 528 bytes from 131072 bytes)
+Flash: [          ]   0.9% (used 4572 bytes from 524288 bytes)
+Building .pio/build/release/firmware.bin
+============================ [SUCCESS] Took 7.34 seconds ============================
+
+Environment    Status    Duration
+-------------  --------  ------------
+release        SUCCESS   00:00:07.344
+============================ 1 succeeded in 00:00:07.344 ============================
+```
+
+The project is now ready to be built and flashed to the board. You can use the `pio run -t upload` command to flash the firmware to the board. Check that with the `pio device list` command that the board is connected to your computer.
+
 
 ## The Tools
 
@@ -78,6 +105,9 @@ All code must follow standard code structure: ./Core/Tests/ for unit tests, ./Co
 - All functions must be documented with Doxygen style comments. You can use the [Doxygen](https://www.doxygen.nl/) tool to generate documentation from your code.
 - You must create a comprehensive README file that explains how to build and run your code, as well as how to use the CLI commands. The README file should also include a description of the FSM states and their transitions.
 
+Example file structure:<br>
+<img src="./media/example_filestructure.png" alt="drawing" height="600"/>
 ## Tips
 - You have 2 full weeks of time to complete the task. Early submission will not be taken into account for evaluation so do not rush, take your time to implement the task correctly and cleanly. 
+- Most of the cars boards's code is public on the eagletrt organization on GitHub. Look at the dev branches of the repositories to see how the code is structured and how the coding standards are applied.
 
