@@ -30,7 +30,7 @@ How you get there is yours to design. What we care about is that each step holds
 
 The log is in this folder, under [`2024_09_08_14_38_41_ENDURANCE_run1/`](./2024_09_08_14_38_41_ENDURANCE_run1): 2207 s of acquisition, about 20 km covered. It contains:
 
-- `parsed/` — the CAN bus and GPS logs decoded into CSV, one file per message, gzipped (`pd.read_csv("...csv.gz")` opens them as they are)
+- `parsed/` — the CAN bus and GPS logs decoded into CSV, one file per message
 - `centerline.json` — the reference line of the layout
 
 > The car does not run continuously for 2207 s, and it is not driven the same way throughout. Work out the structure of the session from the data before you assume anything about it.

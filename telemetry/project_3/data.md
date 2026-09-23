@@ -39,8 +39,9 @@ About 100 Hz each.
 | File                     | Columns             | Meaning                                                                                                                                                                |
 | ------------------------ | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `imu_acceleration.csv` | `x`, `y`, `z` | Accelerations in**g**, vehicle frame: `x` longitudinal, `y` lateral, `z` vertical. Gravity included, so `z ≈ -1` at standstill. ~235 Hz, raw and noisy. |
-| `imu_angular_rate.csv` | `x`, `y`, `z` | Roll, pitch and yaw rates in**deg/s**. `z` is the yaw rate.                                                                                                    |
+| `imu_angular_rate.csv` | `x`, `y`, `z` | Roll, pitch and yaw rates in**deg/s**. `z` is the yaw rate.<br />                                                                                              |
 
+The IMU is reading centripetal accelerations, not centrifugal ones.
 ### Wheels and motors
 
 | File                                        | Columns         | Meaning                                                                                        |
