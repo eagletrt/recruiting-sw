@@ -38,6 +38,8 @@ release        SUCCESS   00:00:07.344
 
 The project is now ready to be built and flashed to the board. You can use the `pio run -t upload` command to flash the firmware to the board. Check that with the `pio device list` command that the board is connected to your computer.
 
+If the upload from platformio fails, you can use the STM32CubeProgrammer to flash the firmware to the board. You can download it from the [official link](https://www.st.com/en/development-tools/stm32cubeprog.html).
+
 (NOTE: VsCode is not required, you can use any IDE of your choice, just install the PIO cli and use the commands above to build and flash the firmware).
 
 ### Wiring

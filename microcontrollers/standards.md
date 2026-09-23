@@ -2,21 +2,7 @@
 
 > The keywords **MUST**, **MUST NOT**, **REQUIRED,** **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **NOT RECOMMENDED**, **MAY**, and **OPTIONAL** in this document are to be interpreted as described in [BCP 14](https://www.rfc-editor.org/info/bcp14) [[RFC2119](https://www.rfc-editor.org/rfc/rfc2119)] [[RFC8174](https://www.rfc-editor.org/rfc/rfc8174)]
 
-
-This document provides an overview of the **coding styles** which have to be followed while developing code for **any** embedded firmware, the following statements MUST always be taken into consideration:
-
-* Rules MAY be proposed in the *To be approved* section and must be approved by the majority of the people belonging to the **Embedded Workgroup** to be officially adopted
-* The **total number of approved rules** is not limited but SHOULD be kept **as low as possible** to allow everyone to remember them easily, since having too many rules may be counterproductive
-* It is RECOMMENDED to use as many **tools** as possible to automatically check and/or enforce the approved rules so that they are always respected
-* Any rule can be added, edited or removed at any time if the decision is made by the majority of the **Embedded Workgroup**
-* Rules MAY be grouped into different categories and they MUST have a **unique code** (e.g. Rule-G0), **definition** (inside the /Tip notice) and **rationale** to explain why the rule is needed. **Examples** MAY be added for further clarification
-
-
-
 ---
-
-
-# Approved Rules
 
 ## General rules
 
