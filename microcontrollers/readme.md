@@ -17,7 +17,7 @@
 <img src="./media/cubemx_project.png" alt="drawing" width="900"/>
 <img src="./media/cubemx_generator.png" alt="drawing" width="900"/>
 
-- Install platformio.
+- Install [platformio](https://platformio.org/).
 
 - Run `pio init` to generate the platformio project files, there is a sample configuration file provided in the [`platformio.ini`](./sample_platformio.ini) file, you can modify it if you need to. You can also use the `pio init --ide vscode` command to generate the project files for VsCode.
 
