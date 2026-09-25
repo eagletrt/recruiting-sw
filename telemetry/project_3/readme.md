@@ -47,7 +47,7 @@ We expect you to reason about (and document) at least: the common time base you 
 
 Comparing laps in the time domain is useless — two laps drift apart after the first corner. Everything you compare has to live on a **distance axis**.
 
-The raw material is there: every position sample carries the distance along the track (`s`, see `data.md`). What is not done for you is the part that matters. `s` is sampled on the position channel's clock, not on a regular distance grid; every other channel sits on its own timeline; and no two laps are exactly the same length. Getting speed, pedals, steering and accelerations onto one common distance grid, so that two laps can actually be subtracted from each other, is your job.
+The raw material is there: every position sample carries the distance along the track (`s`, see `data.md`). What is not done for you is the part that matters. `s` is sampled on the position channel's clock, not on a regular distance grid; every other channel sits on its own timeline. Getting speed, pedals, steering and accelerations onto one common distance grid, so that two laps can actually be subtracted from each other, is your job.
 
 Show that your grid is consistent lap to lap, and say what you did at the seams.
 
@@ -56,6 +56,8 @@ Show that your grid is consistent lap to lap, and say what you did at the seams.
 Split the session into laps, and the laps into the pieces worth comparing. Discard whatever is not representative, and justify what you discard.
 
 Then, inside a lap, segment the corners into driving phases: at a minimum **braking point, braking phase, trail braking, minimum speed / apex, throttle application on exit**. The algorithm is yours to design — thresholds, state machine, change-point detection, clustering on the pedal, steering and acceleration signals, whatever you can defend.
+
+You can check this article to understand the different phases: [driver61.com/uni/corner-phases](https://driver61.com/uni/corner-phases/)
 
 ### 4. Driving style, and what it costs
 
