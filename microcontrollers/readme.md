@@ -121,7 +121,7 @@ All code must follow standard code structure: ```./Core/Tests/``` for unit tests
 - Create a new GitHub repository, the repository name should be: ```embedded-project``` (do not fork this repo -_-).
 - Create git commits as you make progress, THEY MUST BE FREQUENT AND DESCRIPTIVE [following standard naming](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13). You will be evaluated on your git history as well.
 - All functions must be documented with Doxygen style comments. You can use the [Doxygen](https://www.doxygen.nl/) tool to generate documentation from your code.
-- You must create a comprehensive README file that explains how to build and run your code, as well as how to use the CLI commands. The README file should also include a description of the FSM states and their transitions.
+- You must create a comprehensive README file that explains how to build and run your code, as well as how to use the CLI commands. The README file should also include a description of the FSM states and their transitions as well as all of your design choices and reasonings.
 
 Example file structure:
 ```
