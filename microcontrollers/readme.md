@@ -46,6 +46,7 @@ If the upload from platformio fails, you can use the STM32CubeProgrammer to flas
 
 You will need to connect the voltage divider to the power and ground pins of the nucleo board. The potentiometer and the thermistor will be connected to the ADC pins of the nucleo board. The led will be connected to a timer enabled GPIO pin of the nucleo board. The user button and the board led are already connected to GPIO pins of the nucleo board.
 
+<img src="./media/image.png" width="400"/>
 
 ## Prerequisites
 
