@@ -1,0 +1,33 @@
+VERSION "1.0"
+
+
+NS_ :
+	CM_
+	BA_DEF_
+	BA_
+	BA_DEF_DEF_
+
+BS_:
+
+BU_: AS VEHICLE
+
+
+BO_ 256 AS_CMD: 8 AS
+ SG_ ThrottleReq : 0|16@1+ (0.001,0) [0|1] "" VEHICLE
+ SG_ BrakeReq : 16|16@1+ (0.001,0) [0|1] "" VEHICLE
+ SG_ MissionFinished : 32|1@1+ (1,0) [0|1] "" VEHICLE
+
+BO_ 512 VEH_SPEED: 8 VEHICLE
+ SG_ VehicleSpeed : 0|16@1+ (0.01,0) [0|40] "m/s" AS
+
+
+CM_ BO_ 256 "Longitudinal command from the autonomous system. Send every 10 ms. If no AS_CMD arrives for 200 ms the vehicle triggers the emergency brake.";
+CM_ SG_ 256 ThrottleReq "Throttle request, 0 = none, 1 = full.";
+CM_ SG_ 256 BrakeReq "Brake request, 0 = none, 1 = full.";
+CM_ SG_ 256 MissionFinished "Set to 1 once the vehicle is at standstill inside the stop zone.";
+CM_ BO_ 512 "Vehicle speed, sent every 10 ms.";
+
+BA_DEF_ BO_ "GenMsgCycleTime" INT 0 10000;
+BA_DEF_DEF_ "GenMsgCycleTime" 0;
+BA_ "GenMsgCycleTime" BO_ 256 10;
+BA_ "GenMsgCycleTime" BO_ 512 10;

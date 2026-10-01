@@ -1,0 +1,15 @@
+/**:
+  ros__parameters:
+    track:
+      straight_length: 75.0
+      track_width: 4.0
+      cone_spacing: 5.0
+      stop_zone_length: 10.0
+
+fake_perception:
+  ros__parameters:
+    range: 50.0
+    fov_deg: 120.0
+    noise_std: 0.0
+    miss_probability: 0.0
+    rate: 10.0
