@@ -1,6 +1,4 @@
-# Eagle Driverless: Controls Software Task
-
-Welcome, and thanks for applying to the driverless team.
+# E-Agle TRT AS Controls Software Task
 
 This task is a small version of what the controls software group does every day: take data from other parts of the car, decide what the car should do, and talk to the vehicle over CAN. You will drive a simulated Formula Student car down an acceleration track and stop it in the right place.
 
