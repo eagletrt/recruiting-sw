@@ -81,7 +81,7 @@ This does **not** survive a reboot. If you restart your machine (or WSL) and sud
 
 ## 4. The simulator
 
-The simulator is a set of ROS nodes in the `eagle_sim` package. There is no launch file for them. Writing one is part of your task (see section 7).
+The simulator is a set of ROS nodes in the `eagle_sim` package. We include one launch file, `dev.launch.py`, that starts the simulator and RViz so you can have a first look around. It does not start any of your code. Writing your own launch file that runs everything together is part of your task (see section 7).
 
 | Executable | What it does |
 |---|---|
@@ -179,7 +179,7 @@ Create **your own ROS 2 package** (C++) in `src/`, next to ours. In it:
 3. **Longitudinal control.** A PID controller that decides throttle and brake. Go fast, then stop inside the orange box.
 4. **Commands to CAN.** Send `AS_CMD` every 10 ms, and set `MissionFinished` once you are stopped in the box.
 5. **Parameters.** Gains, speeds, anything tunable goes in a YAML file, not hardcoded.
-6. **Launch file.** One command that starts everything: all five simulator nodes, your nodes, and RViz.
+6. **Launch file.** Your own launch file, in your package. One command that starts everything: all five simulator nodes, your nodes, and RViz with your config.
 7. **RViz.** Start from our `base.rviz` and make your own config that also shows what your software is doing. The centerline at least. Anything else that helps you (or us) understand what is going on is welcome.
 8. **Robustness.** Handle the things that can go wrong. What does your software do if the speed stops arriving? If the cones stop arriving?
 9. **Rosbag.** Record a bag of a successful run and include it.

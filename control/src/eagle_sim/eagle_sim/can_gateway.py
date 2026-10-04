@@ -14,9 +14,9 @@ import rclpy
 from ament_index_python.packages import get_package_share_directory
 from nav_msgs.msg import Odometry
 from rclpy.node import Node
+from std_msgs.msg import Float32MultiArray
 from std_srvs.srv import Trigger
 
-from eagle_msgs.msg import ActuatorCmd, GatewayStatus
 
 
 class CanGateway(Node):
@@ -34,8 +34,8 @@ class CanGateway(Node):
         self.get_logger().info(f'CAN bus: {interface}/{channel}')
         self.reset()
 
-        self.cmd_pub = self.create_publisher(ActuatorCmd, '/sim/actuator_cmd', 10)
-        self.status_pub = self.create_publisher(GatewayStatus, '/sim/gateway_status', 10)
+        # Internal link to vehicle_sim: [throttle, brake, emergency_brake]
+        self.cmd_pub = self.create_publisher(Float32MultiArray, '/sim/actuator_cmd', 10)
         self.create_subscription(Odometry, '/sim/ground_truth/odom', self.on_odom, 10)
         self.create_service(Trigger, '/can_gateway/reset', self.on_reset)
         self.create_timer(0.005, self.read_can)
@@ -66,7 +66,10 @@ class CanGateway(Node):
                 continue
             self.throttle = min(max(signals['ThrottleReq'], 0.0), 1.0)
             self.brake = min(max(signals['BrakeReq'], 0.0), 1.0)
-            self.mission_finished = bool(signals['MissionFinished'])
+            finished = bool(signals['MissionFinished'])
+            if finished and not self.mission_finished:
+                self.get_logger().info('Mission finished received, holding the brake')
+            self.mission_finished = finished
             self.last_cmd_time = self.get_clock().now()
 
     def publish_cmd(self):
@@ -77,20 +80,9 @@ class CanGateway(Node):
                 self.emergency_brake = True
                 self.get_logger().error(f'EMERGENCY BRAKE: no AS_CMD for {silence * 1000:.0f} ms')
 
-        cmd = ActuatorCmd()
-        cmd.header.stamp = now.to_msg()
-        cmd.emergency_brake = self.emergency_brake
-        cmd.throttle = 0.0 if self.mission_finished else self.throttle
-        cmd.brake = 1.0 if self.mission_finished else self.brake
-        self.cmd_pub.publish(cmd)
-
-        status = GatewayStatus()
-        status.header.stamp = cmd.header.stamp
-        status.emergency_brake = self.emergency_brake
-        status.mission_finished = self.mission_finished
-        status.throttle_request = self.throttle
-        status.brake_request = self.brake
-        self.status_pub.publish(status)
+        throttle = 0.0 if self.mission_finished else self.throttle
+        brake = 1.0 if self.mission_finished else self.brake
+        self.cmd_pub.publish(Float32MultiArray(data=[throttle, brake, float(self.emergency_brake)]))
 
     def on_odom(self, msg: Odometry):
         speed = msg.twist.twist.linear.x

@@ -11,12 +11,10 @@ import rclpy
 from geometry_msgs.msg import TransformStamped
 from nav_msgs.msg import Odometry
 from rclpy.node import Node
-from std_msgs.msg import Float64
+from std_msgs.msg import Float32MultiArray, Float64
 from std_srvs.srv import Trigger
 from tf2_ros import TransformBroadcaster
 from visualization_msgs.msg import Marker, MarkerArray
-
-from eagle_msgs.msg import ActuatorCmd
 
 G = 9.81
 AIR_DENSITY = 1.2
@@ -63,7 +61,9 @@ class VehicleSim(Node):
         self.state = State()
         self.reset()
 
-        self.cmd = ActuatorCmd()
+        self.throttle_cmd = 0.0
+        self.brake_cmd = 0.0
+        self.ebs_cmd = False
         self.cmd_time = None
         self.steer_cmd = 0.0
         self.ebs_latched = False
@@ -71,7 +71,7 @@ class VehicleSim(Node):
         self.tf_broadcaster = TransformBroadcaster(self)
         self.odom_pub = self.create_publisher(Odometry, '/sim/ground_truth/odom', 10)
         self.marker_pub = self.create_publisher(MarkerArray, '/sim/vehicle_markers', 1)
-        self.create_subscription(ActuatorCmd, '/sim/actuator_cmd', self.on_cmd, 10)
+        self.create_subscription(Float32MultiArray, '/sim/actuator_cmd', self.on_cmd, 10)
         self.create_subscription(Float64, '/sim/steering_cmd', self.on_steer, 10)
         self.create_service(Trigger, '/sim/reset', self.on_reset)
 
@@ -83,8 +83,12 @@ class VehicleSim(Node):
         self.state = State(x=self.init_x, y=self.init_y, yaw=self.init_yaw)
         self.ebs_latched = False
 
-    def on_cmd(self, msg: ActuatorCmd):
-        self.cmd = msg
+    def on_cmd(self, msg: Float32MultiArray):
+        """Internal command from can_gateway: [throttle, brake, emergency_brake]."""
+        if len(msg.data) != 3:
+            return
+        self.throttle_cmd, self.brake_cmd = msg.data[0], msg.data[1]
+        self.ebs_cmd = msg.data[2] > 0.5
         self.cmd_time = self.get_clock().now()
 
     def on_steer(self, msg: Float64):
@@ -92,7 +96,9 @@ class VehicleSim(Node):
 
     def on_reset(self, _request, response):
         self.reset()
-        self.cmd = ActuatorCmd()
+        self.throttle_cmd = 0.0
+        self.brake_cmd = 0.0
+        self.ebs_cmd = False
         self.cmd_time = None
         self.steer_cmd = 0.0
         response.success = True
@@ -101,7 +107,7 @@ class VehicleSim(Node):
     def emergency_active(self, now) -> bool:
         stale = self.cmd_time is not None and \
             (now - self.cmd_time).nanoseconds * 1e-9 > self.cmd_timeout
-        if self.cmd.emergency_brake or stale:
+        if self.ebs_cmd or stale:
             if not self.ebs_latched:
                 self.get_logger().warn('Emergency brake engaged' + (' (command timeout)' if stale else ''))
             self.ebs_latched = True
@@ -109,8 +115,8 @@ class VehicleSim(Node):
 
     def step(self, dt: float, ebs: bool):
         s = self.state
-        throttle_target = 0.0 if ebs else min(max(self.cmd.throttle, 0.0), 1.0)
-        brake_target = 0.0 if ebs else min(max(self.cmd.brake, 0.0), 1.0)
+        throttle_target = 0.0 if ebs else min(max(self.throttle_cmd, 0.0), 1.0)
+        brake_target = 0.0 if ebs else min(max(self.brake_cmd, 0.0), 1.0)
         s.throttle += (throttle_target - s.throttle) * min(dt / self.tau_throttle, 1.0)
         s.brake += (brake_target - s.brake) * min(dt / self.tau_brake, 1.0)
         s.steer += (self.steer_cmd - s.steer) * min(dt / self.tau_steer, 1.0)

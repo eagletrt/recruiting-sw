@@ -9,8 +9,6 @@ find_package(geometry_msgs REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Cone.msg"
   "msg/ConeArray.msg"
-  "msg/ActuatorCmd.msg"
-  "msg/GatewayStatus.msg"
   DEPENDENCIES std_msgs geometry_msgs
 )
 
