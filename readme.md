@@ -1,6 +1,6 @@
-# Recruiting software 2024/25
+# Recruiting software 2026/2027
 
-Welcome to the recruiting repository of the software team at E-Agle Trento Racing Team.
+Welcome to the recruiting repository of the Software team at E-Agle Trento Racing Team.
 
 This test is designed to get an idea of your technical skills and workflow. Assignments are built around the tools we use daily while developing software for our vehicle.
 
