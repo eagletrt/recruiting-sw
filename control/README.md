@@ -232,3 +232,14 @@ Send us a link to a git repository that contains:
 We will clone it, follow your README, and run it.
 
 If you get stuck on the setup or think you found a bug in the simulator, write to us as usual.
+
+## AI Usage
+
+Include an honest table describing how you used AI tools (e.g., Claude, ChatGPT, Gemini, Copilot) during the project: which tool, and what for (explaining a concept, writing or debugging code, drafting text, etc.).
+
+| Tool | What it was used for |
+|------|----------------------|
+| e.g. Claude | Explained how X works |
+| e.g. Gemini | Generated the parsing function in `utils.py` |
+
+Please be transparent: AI use is allowed, but undisclosed use will be noticed.
