@@ -186,6 +186,8 @@ Create **your own ROS 2 package** (C++) in `src/`, next to ours. In it:
 10. **Plots.** Speed and commands over time for that run.
 11. **README.** How to set up and run your solution, step by step. We will follow it literally on a clean machine.
 12. **Report.** A short document (Markdown or LaTeX) about your implementation: the steps you took and the choices you made and why. This is separate from the README. The README tells us how to run it, the report tells us how you think.
+13. **Git.** Work in git from the first day and commit as you go. Small commits that each do one thing, with messages that say what changed and why. We read the history, not just the final state, and one giant commit at the end tells us nothing about how you work. Keep generated files out of the repo (`build/`, `install/`, `log/`): a `.gitignore` is expected.
+14. **Code quality.** Write the code for the person who has to read it next. Clear names, small functions, a structure that makes sense, no dead code or commented-out experiments left behind, and a build without warnings.
 
 How many nodes you write and how you split the work between them is your call. Tell us why you chose it.
 

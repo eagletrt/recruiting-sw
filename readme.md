@@ -14,7 +14,9 @@ To see the specific assignments please follow one of the following links, based 
 - [Microcontrollers](./microcontrollers/readme.md)
 - [Steering wheel](./steering_wheel/readme.md)
 - [Telemetry](./telemetry/readme.md)
-- [Driverless](./driverless/readme.md)
+- [Perception](./perception/readme.md)
+- [Controls](./control/readme.md)
+- [Digital Twin](./digital-twin/readme.md)
 
 ## Usage
 
